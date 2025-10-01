@@ -22,7 +22,7 @@ export default {
         theme: "#fa6219", // Website Theme Color
         primary: "#000", // Text Like black
         secondary: "#fff", // text White
-        tertiary: "#919199",
+        tertiary: "#616060",
         quaternary : "#F4F4F5",
         static : "#000",
         themeDeep : "#006EE5",

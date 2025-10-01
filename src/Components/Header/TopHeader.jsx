@@ -12,9 +12,9 @@ const TopHeader = () => {
                 <div className="flex gap-24">
                 <MinTitle className=" md:text-[12px] font-medium" text="Store Locator"/>
                 <div className="flex gap-4 items-center">
-                    <p className="text-base text-primary opacity-[0.4]"><FaFacebookF /></p>
-                    <p className="text-base text-primary opacity-[0.4]"><FaTwitter /></p>
-                    <p className="text-base text-primary opacity-[0.4]"><FaInstagram /></p>
+                  <a className='text-base text-primary opacity-[0.4]' href="#" target="_blank"><FaFacebookF /></a>
+                  <a className='text-base text-primary opacity-[0.4]' href="#" target="_blank"><FaTwitter /></a>
+                  <a className='text-base text-primary opacity-[0.4]' href="#" target="_blank"><FaInstagram /></a>
                 </div>
                 </div>
             </div>
