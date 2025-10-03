@@ -18,7 +18,9 @@ import MinTitle from "../Layout/Title/MinTitle";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ViewAllButton from "../Layout/ButtonList/ViewAllButton";
-const NewArrivals = ({loading}) => {
+import LargeTitle from "../Layout/Title/LargeTitle";
+import MidTitle from "../Layout/Title/MidTitle";
+const CustomerReview = ({loading}) => {
   const navigate = useNavigate()
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -63,7 +65,6 @@ const NewArrivals = ({loading}) => {
 //   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
 // );
 
-const topRatedProductText = "New Arivals"
   return (
     <>
       {productData.length > 0  && (
@@ -75,14 +76,14 @@ const topRatedProductText = "New Arivals"
             >
               {/* Section Title with Custom Navigation Buttons */}
               <div className="pb-[20px] sm:pb-sectionSm lg:pb-sectionMd flex items-center justify-between relative">
-                <CategoryTitle
-                  className="font-bold tracking-wider  font-tertiary uppercase"
-                  text={topRatedProductText}
+                <LargeTitle
+                  className="font-bold tracking-wider font-tertiary uppercase"
+                  text="Our Happy Customers"
                 />
                 <div className="flex gap-x-2 sm:gap-x-5 md:gap-x-6 lg:gap-x-8 items-center">
-                <div onClick={() => handleGoShop("topRated")} className="">
+                {/* <div onClick={() => handleGoShop("topRated")} className="">
                 <ViewAllButton  />
-                  </div>
+                  </div> */}
  <div className="flex space-x-2">
                      <div
                        ref={prevRef}
@@ -125,8 +126,8 @@ const topRatedProductText = "New Arivals"
                   1: { slidesPerView: 2 },
                   576: { slidesPerView: 3 },
                   768: { slidesPerView: 3 },
-                  1024: { slidesPerView: 4 },
-                  1200: { slidesPerView: 5 },
+                  1024: { slidesPerView: 3 },
+                  1200: { slidesPerView: 3 },
                 }}
               >
                 <div className="">
@@ -180,4 +181,4 @@ const topRatedProductText = "New Arivals"
   );
 };
 
-export default NewArrivals;
+export default CustomerReview;

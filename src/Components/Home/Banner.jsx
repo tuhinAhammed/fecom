@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Container from '../Layout/Container'
-import LargeTitle from '../Layout/Title/LargeTitle'
+import ExtraLargeTitle from '../Layout/Title/ExtraLargeTitle'
 import MinTitle from '../Layout/Title/MinTitle'
 import PrimaryButton from '../Layout/ButtonList/PrimaryButton'
 import bannerOne from "../../assets/Banner/bannerOne.png"
@@ -32,29 +32,29 @@ const Banner = () => {
     return (
         <div>
             <Container>
-                <div className="grid grid-cols-12 items-start gap-24 ">
-                    <div className="col-span-5 pt-12">
-                        <LargeTitle className="font-black font-secondary" text="Find Clothes That Matches Your Style" />
+                <div className="grid grid-cols-1 md:grid-cols-12 items-start gap-24 ">
+                    <div className="col-span-1 md:col-span-5 pt-12">
+                        <ExtraLargeTitle className="font-black font-secondary" text="Find Clothes That Matches Your Style" />
                         <MinTitle className="text-tertiary font-secondary py-3 sm:py-4 md:py-8" text="Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style." />
                         <PrimaryButton slug="shop" className="w-[50%]" text="Shop Now" />
                         {/* Counter */}
                         <div className="grid grid-cols-3 gap-4 items-center py-10">
                             <div className="">
-                                <LargeTitle className="!text-4xl font-semibold" text="200+" />
+                                <ExtraLargeTitle className="!text-4xl font-semibold" text="200+" />
                                 <MinTitle className="text-tertiary" text="Greatfull Branch" />
                             </div>
                             <div className="">
-                                <LargeTitle className="!text-4xl font-semibold" text="2000+" />
+                                <ExtraLargeTitle className="!text-4xl font-semibold" text="2000+" />
                                 <MinTitle className="text-tertiary" text="High-Quality Products" />
                             </div>
                             <div className="">
-                                <LargeTitle className="!text-4xl font-semibold" text="30,000+" />
+                                <ExtraLargeTitle className="!text-4xl font-semibold" text="30,000+" />
                                 <MinTitle className="text-tertiary" text="Happy Customers" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-span-7 relative">
+                    <div className="col-span-1 md:col-span-7 relative">
                         <img
                             src={bannerOne}
                             alt="Logo"

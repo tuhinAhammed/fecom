@@ -7,6 +7,7 @@ import MainHeader from './Components/Header/MainHeader'
 import { Outlet } from 'react-router-dom'
 import MainFooter from './Components/Footer/MainFooter'
 import Subscription from './Components/Footer/Subscription'
+import { Bounce, ToastContainer } from 'react-toastify'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,6 +16,19 @@ function App() {
     <>
     <TopHeader/>
     <MainHeader/>
+    <ToastContainer
+            position="top-left"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Bounce}
+          />
     <Outlet />
     <Subscription/>
     <MainFooter/>

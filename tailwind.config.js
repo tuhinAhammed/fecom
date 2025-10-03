@@ -25,11 +25,11 @@ export default {
         tertiary: "#616060",
         quaternary : "#F4F4F5",
         static : "#000",
-        themeDeep : "#006EE5",
+        themeDeep : "#000000",
         footerBg : "#4C4C4C",
         lightThemeBg : "#E5F2FF", // for light theme background color
         buttonHover :"#ca5821",
-        borderColor : "#dddddd",
+        borderColor : "#CCCCCC",
         skeletonLoading : "#cbd5e1"
       },
       padding: {

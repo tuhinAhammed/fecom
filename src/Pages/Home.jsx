@@ -3,6 +3,7 @@ import Container from '../Components/Layout/Container'
 import MinTitle from '../Components/Layout/Title/MinTitle'
 import Banner from '../Components/Home/Banner'
 import NewArrivals from '../Components/Home/NewArrivals'
+import CustomerReview from '../Components/Home/CustomerReview'
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
 
         <Banner/>
         <NewArrivals/>
+        <CustomerReview/>
     </div>
   )
 }
