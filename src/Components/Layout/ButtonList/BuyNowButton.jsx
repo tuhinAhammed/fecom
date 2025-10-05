@@ -17,7 +17,7 @@ const BuyNowButton = ({ text, className , onClick}) => {
   return (
     <div
       onClick={onClick}
-      className={`text-[10px] md:text-[12px] text-center px-1 sm:px-[2px] md:px-5 py-[6px] md:py-[10px] rounded-md  bg-static text-secondary hover:bg-theme 
+      className={`text-[10px] md:text-sm text-center px-1 sm:px-[2px] md:px-5 py-[6px] md:py-2   bg-static text-secondary hover:bg-theme 
     duration-300 cursor-pointer active:bg-static  border-[1px] border-static active:border-static hover:border-theme ${
       isClicked ? "bg-buttonHover" : ""
     } ${className}`}

@@ -22,6 +22,7 @@ import { MdAddShoppingCart, MdShoppingCartCheckout } from "react-icons/md";
 import SelectButton from "../../Layout/ButtonList/SelectButton";
 import { LiaCartArrowDownSolid, LiaCartPlusSolid } from "react-icons/lia";
 import { toastr_position } from "../../../Api";
+import MidTitle from "../Title/MidTitle";
 // import { addCompareItem } from "../../Redux/Slices/compareSlice";
 const DOMAIN_NAME = import.meta.env.VITE_API_DOMAIN_NAME;
 
@@ -40,6 +41,7 @@ const PrimaryProductCard = ({
   isVariant,
   quantity,
   productId,
+  category,
   variant,
   variantAttribute,
   tax,
@@ -49,6 +51,7 @@ const PrimaryProductCard = ({
   codAvailable,
   weight,
   translation,
+  stock
 }) => {
   // For Quick View Modals
 
@@ -56,10 +59,10 @@ const PrimaryProductCard = ({
   const currencyData = useSelector(
     (state) => state.currency?.selectedCurrency || []
   );
-  const { currency, conversion_rate_to_tk, currency_symbol } = currencyData;
-
+  const { currency, } = currencyData;
+  const currency_symbol = "৳"
+  const conversion_rate_to_tk = "0"
   const productImage = `${DOMAIN_NAME}/${thumbnail}`;
-  console.log(productImage);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems); // Access cartItems from Redux store
@@ -264,10 +267,10 @@ const PrimaryProductCard = ({
 
   // Translation
   // Fetch the selected language from Redux
-  const displayName =  name;
+  const displayName = name;
 
   return (
-    <div className="">
+    <div className="group">
       <div className="">
         {loading ? (
           <div className="border-[1px] border-skeletonLoading  ">
@@ -294,23 +297,22 @@ const PrimaryProductCard = ({
             <div className="button my-3 w-[60%] m-auto h-8 rounded-lg bg-skeletonLoading  animate-pulse"></div>
           </div>
         ) : (
-          <div className="relative border-[1px] border-primary border-opacity-[0.1]  overflow-hidden bg-secondary duration-300 group/outer  hover:border-theme h-auto z-[4]">
+          <div className="relative border-[1px] border-primary border-opacity-[0.1]  overflow-hidden bg-secondary duration-300 group/outer  hover:border-theme h-auto z-[4] shadow-2xl">
+
             <div className="">
               {/* Discount Badge */}
               {discount > 0 && (
                 <div className="absolute top-1 sm:top-2 md:top-3 lg:top-4 left-1 sm:left-2 md:left-3 lg:left-4 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
                   <p className="text-[12px] font-normal">
                     {discountType === "2"
-                      ? `-${
-                          Number.isInteger(Number(discount))
-                            ? Number(discount)
-                            : Number(discount).toFixed(2)
-                        }%`
-                      : `-$${
-                          Number.isInteger(Number(discount))
-                            ? Number(discount)
-                            : Number(discount).toFixed(2)
-                        }`}
+                      ? `-${Number.isInteger(Number(discount))
+                        ? Number(discount)
+                        : Number(discount).toFixed(2)
+                      }%`
+                      : `-$${Number.isInteger(Number(discount))
+                        ? Number(discount)
+                        : Number(discount).toFixed(2)
+                      }`}
                   </p>
                 </div>
               )}
@@ -341,7 +343,7 @@ const PrimaryProductCard = ({
 
                     <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
                       {(() => {
-                        var fullText = "Compare" ;
+                        var fullText = "Compare";
                         var maxLength = 12;
                         return fullText.length > maxLength
                           ? fullText.slice(0, maxLength - 1) + "…"
@@ -375,7 +377,7 @@ const PrimaryProductCard = ({
 
               <div
                 onClick={handleProductFetch}
-                className={`  
+                className={`  relative
         w-full   bg-gray-100 overflow-hidden cursor-pointer`}
               >
                 {loading ? (
@@ -390,22 +392,103 @@ const PrimaryProductCard = ({
                   />
                   // </div>
                 )}
+                <div className="absolute bottom-0 w-full">
+                  {stock === "yes" ? (
+                    <div className="">
+                      {isVariant === true ? (
+                        <SelectButton
+                          onClick={handleViewModal}
+                          className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
+                          // link={"/"}
+                          text={(() => {
+                            const fullText = "Select";
+                            const maxLength = 12;
+                            return fullText.length > maxLength
+                              ? fullText.slice(0, maxLength - 1) + "…"
+                              : fullText;
+                          })()}
+                          // slug={slug}
+                          icon={
+                            <LiaCartArrowDownSolid className="font-bold text-[17px]" />
+                          }
+                        />
+                      ) : (
+                        <div className=" grid-cols-1 gap-1 hidden group-hover:grid duration-500 delay-500 ">
+                          <BuyNowButton
+                            onClick={handleAddToCart}
+                            className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[100%] m-auto"
+                            // link={"/"}
+                            text={(() => {
+                              const fullText = "Add to Cart"
+
+                              const maxLength = 12;
+                              return fullText.length > maxLength
+                                ? fullText.slice(0, maxLength - 1) + "…"
+                                : fullText;
+                            })()}
+                            icon={
+                              <LiaCartPlusSolid className="font-bold text-lg" />
+                            }
+                          // slug={slug}
+                          />
+                          <AddToCartButton
+                            onClick={handleAddToCart}
+                            className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[100%] m-auto"
+                            // link={"/"}
+                            text={(() => {
+                              const fullText = "Add to Cart"
+
+                              const maxLength = 12;
+                              return fullText.length > maxLength
+                                ? fullText.slice(0, maxLength - 1) + "…"
+                                : fullText;
+                            })()}
+                            icon={
+                              <LiaCartPlusSolid className="font-bold text-lg" />
+                            }
+                          // slug={slug}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="">
+                      <SelectButton
+                        className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto  !cursor-default !bg-red-500 !border-red-500 hover:!bg-red-500"
+                        // link={"/"}
+                        text={(() => {
+                          const fullText = "Out Of Stock"
+
+                          const maxLength = 13;
+                          return fullText.length > maxLength
+                            ? fullText.slice(0, maxLength - 1) + "…"
+                            : fullText;
+                        })()}
+
+                      // slug={slug}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Product Info */}
               <div className="w-full p-1 sm:p-1 md:p-2 lg:p-3 xl:p-3 flex flex-col flex-grow">
+                {/* Product Category */}
+                <MinTitle className="text-tertiary pb-2" text={category} />
+
                 <div onClick={handleProductFetch} className="cursor-pointer">
-                  <MinTitle
-                    className="hover:text-theme text-center font-medium text-tertiary h-[30px] sm:h-[45px] md:[40px] lg:h-[40px]"
+                  <MidTitle
+                    className="hover:text-theme  font-medium text-primary h-[30px] sm:h-[45px] md:[40px] lg:h-[40px]"
                     text={
-                      displayName?.length > 30
-                        ? `${displayName.substring(0, 30)}...`
+                      displayName?.length > 60
+                        ? `${displayName.substring(0, 60)}...`
                         : displayName
                     }
                   />
                 </div>
-                <div className="price flex gap-2 py-[6px] md:py-2 lg:py-2 items-end justify-center">
-                  <p className="text-[12px] md:text-[16px] font-bold text-primary">
+                <div className="price flex gap-2 py-[6px] md:py-2 lg:py-2 items-end ">
+                  <p className="text-[12px] md:text-[16px] font-semibold text-primary">
                     {currency_symbol}
                     {(
                       finalPrice / (parseFloat(conversion_rate_to_tk) || 1)
@@ -423,65 +506,7 @@ const PrimaryProductCard = ({
                 <div className="m-auto pb-[6px] sm:pb-[10px] md:pb-[12px] lg:pb-[14px]">
                   {/* <Ratting ratting={ratting} /> */}
                 </div>
-                {quantity > 0 ? (
-                  <div className="">
-                    {isVariant === true ? (
-                      <SelectButton
-                        onClick={handleViewModal}
-                        className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
-                        // link={"/"}
-                        text={(() => {
-                          const fullText = "Select";
-                          const maxLength = 12;
-                          return fullText.length > maxLength
-                            ? fullText.slice(0, maxLength - 1) + "…"
-                            : fullText;
-                        })()}
-                        // slug={slug}
-                        icon={
-                          <LiaCartArrowDownSolid className="font-bold text-[17px]" />
-                        }
-                      />
-                    ) : (
-                      <div className="">
-                        <AddToCartButton
-                          onClick={handleAddToCart}
-                          className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto"
-                          // link={"/"}
-                          text={(() => {
-                            const fullText = "Add to Cart"
 
-                            const maxLength = 12;
-                            return fullText.length > maxLength
-                              ? fullText.slice(0, maxLength - 1) + "…"
-                              : fullText;
-                          })()}
-                          icon={
-                            <LiaCartPlusSolid className="font-bold text-lg" />
-                          }
-                          // slug={slug}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="">
-                    <SelectButton
-                      className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto  !cursor-default !bg-red-500 !border-red-500 hover:!bg-red-500"
-                      // link={"/"}
-                      text={(() => {
-                        const fullText = "Out Of Stock"
-
-                        const maxLength = 13;
-                        return fullText.length > maxLength
-                          ? fullText.slice(0, maxLength - 1) + "…"
-                          : fullText;
-                      })()}
-
-                      // slug={slug}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>

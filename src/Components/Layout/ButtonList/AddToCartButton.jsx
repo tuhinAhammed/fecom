@@ -18,7 +18,7 @@ const AddToCartButton = ({ text, className , onClick , icon}) => {
   return (
     <div
       onClick={onClick}
-      className={`text-[10px] md:text-[12px] text-center px-1 sm:px-[2px] md:px-4 lg:px-2  py-[6px] md:py-[10px] rounded-md  bg-theme text-secondary hover:bg-buttonHover 
+      className={`text-[10px] md:text-sm text-center px-1 sm:px-[2px] md:px-4 lg:px-2  py-1 md:py-2   bg-theme text-secondary hover:bg-buttonHover 
     duration-300 cursor-pointer active:bg-static border-[1px] border-theme active:border-static hover:border-buttonHover flex items-center gap-1  justify-center ${
       isClicked ? "bg-buttonHover" : ""
     } ${className}`}

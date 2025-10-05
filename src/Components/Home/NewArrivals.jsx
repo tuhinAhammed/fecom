@@ -114,12 +114,13 @@ const NewArrivals = ({ productData, loading }) => {
                         return (
                           <SwiperSlide className="shadow-sm" key={index}>
                             <PrimaryProductCard
-                              thumbnail={item.photos?.[0] ? 
-                                `${item.photos[0].file_path}/${item.photos[0].file_name}` : 
+                              thumbnail={item.photos?.[0] ?
+                                `${item.photos[0].file_path}/${item.photos[0].file_name}` :
                                 item.thumbnail
                               }
+                              category = {item.category_id}
                               name={item.product_name}
-                              finalPrice={item.final_price}
+                              finalPrice={item.offer_price}
                               regularPrice={item.regular_price}
                               slug={item.slug}
                               discount={item.discount}
@@ -130,6 +131,7 @@ const NewArrivals = ({ productData, loading }) => {
                               isVariant={item.is_variant}
                               quantity={item.stock_qty}
                               productId={item?.id}
+                              stock = {item.stock}
                               variant={null}
                               variantAttribute={null}
                               tax={item.tax}
