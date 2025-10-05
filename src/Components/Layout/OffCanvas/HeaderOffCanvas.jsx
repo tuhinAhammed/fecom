@@ -32,7 +32,7 @@ const HeaderOffCanvas = ({ isOpen, onClose, title, width = "w-[35%]", children }
           <button onClick={onClose} className="text-xl">✕</button>
         </div>
 
-        <div className="p-4">{children}</div>
+        <div className="p-4 h-screen overflow-y-auto">{children}</div>
       </div>
     </>
   )

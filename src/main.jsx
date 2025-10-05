@@ -11,6 +11,8 @@ import Home from "./Pages/Home.jsx";
 import Shop from "./Pages/Shop.jsx";
 import About from "./Pages/About.jsx";
 import Contact from "./Pages/Contact.jsx";
+import { Provider } from "react-redux";
+import store from "./Redux/Store/store.js";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,26 +23,28 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path : "/shop",
+        path: "/shop",
         index: true,
         element: <Shop />,
       },
       {
-        path : "/about",
+        path: "/about",
         index: true,
         element: <About />,
       },
       {
-        path : "/contact",
+        path: "/contact",
         index: true,
         element: <Contact />,
       },
     ],
-  } ,
+  },
 
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

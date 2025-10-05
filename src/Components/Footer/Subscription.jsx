@@ -20,7 +20,7 @@ const Subscription = () => {
                                 // onKeyDown={onKeyDown}
                                 // value={value}
                                 // onChange={onChange}
-                                className=" text-xs md:text-sm lg:text-base focus-visible:outline-none outline-transparent focus-visible:border-[1px] border-transparent focus:!ring-0  py-1 md:py-2 lg:py-2 px-2 w-full rounded-full"
+                                className=" text-xs md:text-sm lg:text-base focus-visible:outline-none outline-transparent focus-visible:border-[1px] border-transparent focus:!ring-0  py-1 md:py-2 lg:py-3 lg:py-2 px-2 w-full rounded-full"
                                 placeholder="Your Email Address.."
                                 type="email"
                                 required

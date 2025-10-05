@@ -32,7 +32,7 @@ const SubmitButton = ({
     <button
       type={type}
       onClick={handleClick}
-      className={`inline-block text-xs md:text-sm lg:text-base font-medium rounded-md px-3 sm:px-3 md:px-5 py-[6px] md:py-2 bg-theme text-secondary cursor-pointer border-2 border-theme duration-300 active:bg-theme active:text-secondary ${
+      className={`inline-block text-xs md:text-sm lg:text-base font-medium rounded-md px-3 sm:px-3 md:px-5 py-[6px] md:py-2 lg:py-3 bg-theme text-secondary cursor-pointer border-2 border-theme duration-300 active:bg-theme active:text-secondary ${
         disabled ? "cursor-not-allowed opacity-50" : ""
       } ${className}`}
       disabled={disabled || isLoading} // Disable when loading or based on the external prop

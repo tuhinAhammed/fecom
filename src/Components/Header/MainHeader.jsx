@@ -8,13 +8,16 @@ import { FaRegHeart } from 'react-icons/fa'
 import { VscAccount } from 'react-icons/vsc'
 import HeaderOffCanvas from '../Layout/OffCanvas/HeaderOffCanvas'
 import AccountContent from './AccountContent'
+import { useSelector } from 'react-redux'
 
 // Example components for each drawer
 const CartContent = () => <p>Your cart items will appear here.</p>
 const WishlistContent = () => <p>Your wishlist items will appear here.</p>
 
 const MainHeader = () => {
-  const [openDrawer, setOpenDrawer] = useState(null) 
+  const [openDrawer, setOpenDrawer] = useState(null)
+  const { token, user } = useSelector((state) => state?.userData)
+
   // values: "cart", "wishlist", "account", null
 
   const handleClose = () => setOpenDrawer(null)
@@ -71,7 +74,7 @@ const MainHeader = () => {
         <WishlistContent />
       </HeaderOffCanvas>
 
-      <HeaderOffCanvas isOpen={openDrawer === "account"} onClose={handleClose} title="Account" width="w-[35%]">
+      <HeaderOffCanvas isOpen={openDrawer === "account"} onClose={handleClose} title={token ? "Dashboard" : "Account"} width="w-[35%]">
         <AccountContent />
       </HeaderOffCanvas>
     </div>

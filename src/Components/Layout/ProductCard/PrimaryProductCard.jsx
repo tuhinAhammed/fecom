@@ -1,0 +1,529 @@
+import React, { useEffect } from "react";
+import MinTitle from "../../Layout/Title/MinTitle";
+import PrimaryButton from "../../Layout/ButtonList/PrimaryButton";
+import { FaExchangeAlt, FaEye, FaRegHeart, FaStar } from "react-icons/fa";
+import { BiCartDownload, BiGitCompare } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+// import Ratting from "./Ratting";
+// import { addToWishlistApi, api, version } from "../../Api/Api";
+import { useDispatch, useSelector } from "react-redux";
+// import { addItem } from "../../Redux/Slices/cartSlice";
+import AddToCartButton from "../../Layout/ButtonList/AddToCartButton";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Ensure you import the CSS
+import { useState } from "react";
+// import ProductQuickView from "../Modals/ProductQuickView";
+import axios from "axios";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaXmark } from "react-icons/fa6";
+import BuyNowButton from "../../Layout/ButtonList/BuyNowButton";
+import { MdAddShoppingCart, MdShoppingCartCheckout } from "react-icons/md";
+import SelectButton from "../../Layout/ButtonList/SelectButton";
+import { LiaCartArrowDownSolid, LiaCartPlusSolid } from "react-icons/lia";
+import { toastr_position } from "../../../Api";
+// import { addCompareItem } from "../../Redux/Slices/compareSlice";
+const DOMAIN_NAME = import.meta.env.VITE_API_DOMAIN_NAME;
+
+const PrimaryProductCard = ({
+  thumbnail,
+  name,
+  finalPrice,
+  regularPrice,
+  slug,
+  discount,
+  ratting,
+  discountType,
+  loading,
+  onQuickView,
+  product,
+  isVariant,
+  quantity,
+  productId,
+  variant,
+  variantAttribute,
+  tax,
+  sku,
+  vendorId,
+  shippingCost,
+  codAvailable,
+  weight,
+  translation,
+}) => {
+  // For Quick View Modals
+
+  // Fetch Currency From Local Storage
+  const currencyData = useSelector(
+    (state) => state.currency?.selectedCurrency || []
+  );
+  const { currency, conversion_rate_to_tk, currency_symbol } = currencyData;
+
+  const productImage = `${DOMAIN_NAME}/${thumbnail}`;
+  console.log(productImage);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems); // Access cartItems from Redux store
+  // const compareItems = useSelector((state) => state.compare.compareItems);
+
+  const loginToken = useSelector((state) => state.userData?.data?.token);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Product Details Page
+  const handleProductFetch = async () => {
+    navigate(`/product/${slug}`);
+  };
+
+  const handleAddToCart = () => {
+    // addd in Redux
+    const newItem = {
+      productName: displayName,
+      productImage: productImage,
+      productPrice: finalPrice,
+      quantity: 1,
+      total_price: finalPrice, // Initial total price
+      selected: true,
+      slug: slug,
+      productId: productId,
+      variant: variant,
+      variantAttribute: variantAttribute,
+      tax: tax,
+      sku: sku,
+      vendorId: vendorId,
+      minPayable: finalPrice,
+      shippingCost: shippingCost,
+      codAvailable: codAvailable,
+      isVariant: isVariant,
+      discount: discount,
+      discountType: discountType,
+      weight: weight,
+      translations: translation, // Include the translations
+    };
+
+    // Check if the product already exists in the cart
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.productName === newItem.productName // Compare based on the product name or unique identifier
+    );
+
+    if (existingItemIndex !== -1) {
+      // If product exists, increase quantity and update total price
+      const existingItem = cartItems[existingItemIndex];
+      const updatedItem = {
+        ...existingItem,
+        quantity: existingItem.quantity + 1, // Increase quantity
+        total_price: existingItem.productPrice * (existingItem.quantity + 1), // Update total price
+      };
+
+      // Dispatch updated item to cart
+      dispatch(addItem(updatedItem)); // Update the item in cart
+    } else {
+      // If product doesn't exist, add the new product to the cart
+      dispatch(addItem(newItem)); // Add new item to cart
+    }
+
+    toast.success("Successfully added!", {
+      position: `${toastr_position}`,
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  };
+
+  // Add To WishList
+  const handleAddToWishlist = async () => {
+    if (!loginToken || loginToken === "") {
+      navigate("/signin");
+      return;
+    }
+
+    const loadingToastId = toast.loading("Adding to wishlist...", {
+      position: `${toastr_position}`,
+    }); // Show immediate feedback inside the existing ToastContainer
+
+    setWishlistLoading(true); // Start loading state
+
+    try {
+      const response = await axios.post(
+        addToWishlistApi,
+        { slug },
+        {
+          headers: {
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
+
+      Promise.resolve().then(() => {
+        if (response.data?.status === "success") {
+          toast.update(loadingToastId, {
+            render: response.data?.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        } else {
+          toast.update(loadingToastId, {
+            render: response.data?.details,
+            type: "warning",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        }
+      });
+    } catch (error) {
+      Promise.resolve().then(() => {
+        toast.update(loadingToastId, {
+          render: error.response?.data?.details || "An error occurred",
+          type: "warning",
+          isLoading: false,
+          autoClose: 1500,
+        });
+      });
+    } finally {
+      setWishlistLoading(false); // Stop loading
+    }
+  };
+
+  // Add to compare
+  const handleAddToCompare = async (slug) => {
+    try {
+      // Check if the product already exists in the compare list
+      // const existingCompareItem = compareItems.find(
+      //   (item) => item.slug === slug
+      // );
+
+      if (existingCompareItem) {
+        toast.info("Product already added to compare!", {
+          position: `${toastr_position}`,
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        return; // Stop execution if the product is already added
+      }
+
+      // Create the product object
+      const newItem = {
+        productName: name,
+        slug: slug,
+        sku: sku,
+      };
+
+      // Dispatch the action to add the product to the compare list
+      dispatch(addCompareItem(newItem));
+      navigate("/compare");
+
+      toast.success("Successfully added!", {
+        position: `${toastr_position}`,
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (error) {
+      console.error("Error adding product to compare:", error);
+    }
+  };
+
+  // Modals Functionality
+  const handleViewModal = async (slug) => {
+    setIsModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable scrolling
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "auto"; // Enable scrolling
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
+  };
+
+  // Reset overflow when component unmounts
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "auto"; // Ensure scrolling is enabled when component unmounts
+    };
+  }, []);
+
+  // Translation
+  // Fetch the selected language from Redux
+  const displayName =  name;
+
+  return (
+    <div className="">
+      <div className="">
+        {loading ? (
+          <div className="border-[1px] border-skeletonLoading  ">
+            <div className="images">
+              <div className="aspect-[4/4.5] bg-skeletonLoading animate-pulse rounded-lg rounded-b-none"></div>
+            </div>
+            <div className="productName mt-4 px-4">
+              <div className="w-full h-3  bg-skeletonLoading animate-pulse rounded-lg"></div>
+              <div className="w-full h-3 mt-2  bg-skeletonLoading animate-pulse rounded-lg"></div>
+            </div>
+
+            <div className="price flex gap-2 py-1 md:py-1 lg:py-2 items-end justify-center mt-2">
+              <p className="w-12 h-4 bg-skeletonLoading animate-pulse rounded-lg"></p>
+              <span className="w-12 h-3 bg-skeletonLoading animate-pulse rounded-lg"></span>
+            </div>
+            <div className="ratting flex gap-1 mt-2 justify-center">
+              {[...Array(5)].map((_, index) => (
+                <FaStar
+                  key={index}
+                  className="text-[10px] sm:text-[10px] md:text-xs lg:text-sm text-skeletonLoading  animate-pulse"
+                />
+              ))}
+            </div>
+            <div className="button my-3 w-[60%] m-auto h-8 rounded-lg bg-skeletonLoading  animate-pulse"></div>
+          </div>
+        ) : (
+          <div className="relative border-[1px] border-primary border-opacity-[0.1]  overflow-hidden bg-secondary duration-300 group/outer  hover:border-theme h-auto z-[4]">
+            <div className="">
+              {/* Discount Badge */}
+              {discount > 0 && (
+                <div className="absolute top-1 sm:top-2 md:top-3 lg:top-4 left-1 sm:left-2 md:left-3 lg:left-4 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
+                  <p className="text-[12px] font-normal">
+                    {discountType === "2"
+                      ? `-${
+                          Number.isInteger(Number(discount))
+                            ? Number(discount)
+                            : Number(discount).toFixed(2)
+                        }%`
+                      : `-$${
+                          Number.isInteger(Number(discount))
+                            ? Number(discount)
+                            : Number(discount).toFixed(2)
+                        }`}
+                  </p>
+                </div>
+              )}
+
+              {/* Wishlist and Compare Icons */}
+              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/outer:opacity-100 transition-opacity duration-300 z-10">
+                {/* Wishlist Button */}
+                <div className="relative ">
+                  <div
+                    onClick={handleAddToWishlist}
+                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
+                  >
+                    <FaRegHeart className="text-base" />
+                    {/* Tooltip on icon hover */}
+
+                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3  py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
+                      Wishlist
+                    </span>
+                  </div>
+                </div>
+                <div className="relative ">
+                  <div
+                    onClick={() => handleAddToCompare(slug)}
+                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
+                  >
+                    <BiGitCompare className="text-base" />
+                    {/* Tooltip on icon hover */}
+
+                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
+                      {(() => {
+                        var fullText = "Compare" ;
+                        var maxLength = 12;
+                        return fullText.length > maxLength
+                          ? fullText.slice(0, maxLength - 1) + "…"
+                          : fullText;
+                      })()}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative w-full">
+                  <div
+                    onClick={handleViewModal}
+                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner w-full"
+                  >
+                    <FaEye className="text-base" />
+                    {/* Tooltip on icon hover */}
+
+                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block block">
+                      {(() => {
+                        const fullText = "Quick View";
+                        const maxLength = 12;
+                        return fullText.length > maxLength
+                          ? fullText.slice(0, maxLength - 1) + "…"
+                          : fullText;
+                      })()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Image container with dynamic aspect ratio */}
+
+              <div
+                onClick={handleProductFetch}
+                className={`  
+        w-full   bg-gray-100 overflow-hidden cursor-pointer`}
+              >
+                {loading ? (
+                  <div className="h-[250px] w-full animate-pulse bg-skeletonLoading"></div>
+                ) : (
+                  // <div onClick={handleProductFetch} className="block">
+                  <img
+                    loading="lazy"
+                    src={productImage}
+                    alt={name}
+                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/4] "
+                  />
+                  // </div>
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div className="w-full p-1 sm:p-1 md:p-2 lg:p-3 xl:p-3 flex flex-col flex-grow">
+                <div onClick={handleProductFetch} className="cursor-pointer">
+                  <MinTitle
+                    className="hover:text-theme text-center font-medium text-tertiary h-[30px] sm:h-[45px] md:[40px] lg:h-[40px]"
+                    text={
+                      displayName?.length > 30
+                        ? `${displayName.substring(0, 30)}...`
+                        : displayName
+                    }
+                  />
+                </div>
+                <div className="price flex gap-2 py-[6px] md:py-2 lg:py-2 items-end justify-center">
+                  <p className="text-[12px] md:text-[16px] font-bold text-primary">
+                    {currency_symbol}
+                    {(
+                      finalPrice / (parseFloat(conversion_rate_to_tk) || 1)
+                    ).toFixed(2)}
+                  </p>
+                  {finalPrice !== regularPrice && (
+                    <span className="text-[10px] md:text-[12px] font-semibold text-gray-400 line-through">
+                      {currency_symbol}
+                      {(
+                        regularPrice / (parseFloat(conversion_rate_to_tk) || 1)
+                      ).toFixed(2)}
+                    </span>
+                  )}
+                </div>
+                <div className="m-auto pb-[6px] sm:pb-[10px] md:pb-[12px] lg:pb-[14px]">
+                  {/* <Ratting ratting={ratting} /> */}
+                </div>
+                {quantity > 0 ? (
+                  <div className="">
+                    {isVariant === true ? (
+                      <SelectButton
+                        onClick={handleViewModal}
+                        className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
+                        // link={"/"}
+                        text={(() => {
+                          const fullText = "Select";
+                          const maxLength = 12;
+                          return fullText.length > maxLength
+                            ? fullText.slice(0, maxLength - 1) + "…"
+                            : fullText;
+                        })()}
+                        // slug={slug}
+                        icon={
+                          <LiaCartArrowDownSolid className="font-bold text-[17px]" />
+                        }
+                      />
+                    ) : (
+                      <div className="">
+                        <AddToCartButton
+                          onClick={handleAddToCart}
+                          className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto"
+                          // link={"/"}
+                          text={(() => {
+                            const fullText = "Add to Cart"
+
+                            const maxLength = 12;
+                            return fullText.length > maxLength
+                              ? fullText.slice(0, maxLength - 1) + "…"
+                              : fullText;
+                          })()}
+                          icon={
+                            <LiaCartPlusSolid className="font-bold text-lg" />
+                          }
+                          // slug={slug}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="">
+                    <SelectButton
+                      className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto  !cursor-default !bg-red-500 !border-red-500 hover:!bg-red-500"
+                      // link={"/"}
+                      text={(() => {
+                        const fullText = "Out Of Stock"
+
+                        const maxLength = 13;
+                        return fullText.length > maxLength
+                          ? fullText.slice(0, maxLength - 1) + "…"
+                          : fullText;
+                      })()}
+
+                      // slug={slug}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      {createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50  "
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleBackdropClick} // Detect backdrop click
+            >
+              {/* {loading ? (
+                <div className="w-12 h-12 bg-skeletonLoading"></div>
+              ) : ( */}
+
+              {/* )} */}
+              <motion.div
+                className="bg-white !rounded-lg shadow-lg  !relative w-[95%] rounded-lg h-[80%] overflow-y-auto md:overflow-visible md:h-[95%] "
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <button
+                  onClick={handleCloseModal}
+                  className="fixed top-[75px] sm:top-[75px] right-[15px] sm:right-[30px] md:absolute md:right-[6px] md:top-[6px] text-red-500 text:lg md:text-xl lg:text-2xl rounded z-[20] "
+                >
+                  <FaXmark />
+                </button>
+                <ProductQuickView slug={slug} />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </div>
+  );
+};
+
+export default PrimaryProductCard;

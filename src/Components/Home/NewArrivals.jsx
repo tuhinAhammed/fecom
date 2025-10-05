@@ -18,7 +18,9 @@ import MinTitle from "../Layout/Title/MinTitle";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ViewAllButton from "../Layout/ButtonList/ViewAllButton";
-const NewArrivals = ({loading}) => {
+import PrimaryProductCard from "../Layout/ProductCard/PrimaryProductCard";
+const NewArrivals = ({ productData, loading }) => {
+  console.log('Product Data:', productData);
   const navigate = useNavigate()
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -26,47 +28,22 @@ const NewArrivals = ({loading}) => {
   //     state.latestAndTopRatedProduct?.topRatedProducts || []
   // )
   // console.log(productData);
-  const productData = [
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-    {
-      name : "Pne"
-    },
-  ]
+
   const handleGoShop = (selectName) => {
     console.log(selectName);
     navigate("/shop", { state: selectName ? { sortBy: selectName } : {}, replace: true });
-};
+  };
 
-// Page Translation
-// const selectedLanguage = useSelector((state) => state.language.selectedLanguage?.lang_code);
-// const topRatedProductTranslations = useSelector(
-//   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
-// );
+  // Page Translation
+  // const selectedLanguage = useSelector((state) => state.language.selectedLanguage?.lang_code);
+  // const topRatedProductTranslations = useSelector(
+  //   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
+  // );
 
-const topRatedProductText = "New Arivals"
+  const topRatedProductText = "New Arivals"
   return (
     <>
-      {productData.length > 0  && (
+      {productData?.length > 0 && (
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionXl bg-secondary ">
           <Container>
             <div
@@ -80,25 +57,25 @@ const topRatedProductText = "New Arivals"
                   text={topRatedProductText}
                 />
                 <div className="flex gap-x-2 sm:gap-x-5 md:gap-x-6 lg:gap-x-8 items-center">
-                <div onClick={() => handleGoShop("topRated")} className="">
-                <ViewAllButton  />
+                  <div onClick={() => handleGoShop("topRated")} className="">
+                    <ViewAllButton />
                   </div>
- <div className="flex space-x-2">
-                     <div
-                       ref={prevRef}
-                       className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep"
-                       style={{ boxShadow: "0px 0px 10px 0px rgb(0 0 0 / 10%)" }}
-                     >
-                       <MdOutlineArrowBackIosNew />
-                     </div>
-                     <div
-                       ref={nextRef}
-                       className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer shadow-md active:bg-themeDeep"
-                       style={{ boxShadow: "0px 0px 10px 0px rgb(0 0 0 / 10%)" }}
-                     >
-                       <MdOutlineArrowForwardIos />
-                     </div>
-                   </div>
+                  <div className="flex space-x-2">
+                    <div
+                      ref={prevRef}
+                      className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep"
+                      style={{ boxShadow: "0px 0px 10px 0px rgb(0 0 0 / 10%)" }}
+                    >
+                      <MdOutlineArrowBackIosNew />
+                    </div>
+                    <div
+                      ref={nextRef}
+                      className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer shadow-md active:bg-themeDeep"
+                      style={{ boxShadow: "0px 0px 10px 0px rgb(0 0 0 / 10%)" }}
+                    >
+                      <MdOutlineArrowForwardIos />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -126,20 +103,22 @@ const topRatedProductText = "New Arivals"
                   576: { slidesPerView: 3 },
                   768: { slidesPerView: 3 },
                   1024: { slidesPerView: 4 },
-                  1200: { slidesPerView: 5 },
+                  1200: { slidesPerView: 4 },
                 }}
               >
                 <div className="">
                   {productData && (
                     <div className="">
-                      {productData.map((item , index) => {
-                        
+                      {productData.map((item, index) => {
+
                         return (
                           <SwiperSlide className="shadow-sm" key={index}>
-                            ok
-{/* <PrimaryProductCard
-                              thumbnail={item.thumbnail}
-                              name={item.name}
+                            <PrimaryProductCard
+                              thumbnail={item.photos?.[0] ? 
+                                `${item.photos[0].file_path}/${item.photos[0].file_name}` : 
+                                item.thumbnail
+                              }
+                              name={item.product_name}
                               finalPrice={item.final_price}
                               regularPrice={item.regular_price}
                               slug={item.slug}
@@ -150,17 +129,17 @@ const topRatedProductText = "New Arivals"
                               onQuickView={() => handleOpenModal(item)}
                               isVariant={item.is_variant}
                               quantity={item.stock_qty}
-                              productId= {item.id}
-                              variant = {null} 
-                              variantAttribute = {null} 
-                              tax= {item.tax}
-                              sku= {item.sku}
-                              vendorId = {item.vendor.id}
-                              minPayable = {item.finalPrice}
-                              shippingCost= {item.shipping_cost}
-                              codAvailable= {item.cod_available}
+                              productId={item?.id}
+                              variant={null}
+                              variantAttribute={null}
+                              tax={item.tax}
+                              sku={item.sku}
+                              // vendorId={item.vendor.id}
+                              minPayable={item.finalPrice}
+                              shippingCost={item.shipping_cost}
+                              codAvailable={item.cod_available}
                               translation={item.translation}
-                            /> */}
+                            />
                           </SwiperSlide>
                         );
                       })}
