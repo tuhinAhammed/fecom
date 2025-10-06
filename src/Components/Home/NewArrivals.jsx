@@ -47,11 +47,11 @@ const NewArrivals = ({ productData, loading }) => {
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionXl bg-secondary ">
           <Container>
             <div
-              className="py-[20px] sm:py-sectionSm lg:py-sectionMd px-2 sm:px-4 md:px-6 lg:px-8 bg-secondary rounded-md"
+              className="rounded-md"
               style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}
             >
               {/* Section Title with Custom Navigation Buttons */}
-              <div className="pb-[20px] sm:pb-sectionSm lg:pb-sectionMd flex items-center justify-between relative">
+              <div className="pb-[20px] sm:pb-sectionSm lg:pb-sectionSm flex items-center justify-between relative">
                 <CategoryTitle
                   className="font-bold tracking-wider  font-tertiary uppercase"
                   text={topRatedProductText}
@@ -82,7 +82,7 @@ const NewArrivals = ({ productData, loading }) => {
               {/* Swiper Slider */}
               <Swiper
                 modules={[Navigation, Autoplay]}
-                spaceBetween={20} // Space between slides
+                spaceBetween={30} // Space between slides
                 slidesPerView={3} // Show 3 slides per view
                 slidesPerGroup={1} // Slide one item at a time
                 autoplay={{
@@ -118,29 +118,17 @@ const NewArrivals = ({ productData, loading }) => {
                                 `${item.photos[0].file_path}/${item.photos[0].file_name}` :
                                 item.thumbnail
                               }
-                              category = {item.category_id}
+                              category={item.category_id}
                               name={item.product_name}
                               finalPrice={item.offer_price}
                               regularPrice={item.regular_price}
                               slug={item.slug}
-                              discount={item.discount}
-                              discountType={item.discount_type}
                               ratting={item.rating}
                               loading={loading}
                               onQuickView={() => handleOpenModal(item)}
-                              isVariant={item.is_variant}
-                              quantity={item.stock_qty}
                               productId={item?.id}
-                              stock = {item.stock}
-                              variant={null}
-                              variantAttribute={null}
-                              tax={item.tax}
-                              sku={item.sku}
-                              // vendorId={item.vendor.id}
-                              minPayable={item.finalPrice}
-                              shippingCost={item.shipping_cost}
-                              codAvailable={item.cod_available}
-                              translation={item.translation}
+                              stock={item.stock}
+                              variants={item?.variants}
                             />
                           </SwiperSlide>
                         );

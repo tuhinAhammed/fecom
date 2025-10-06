@@ -7,7 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 // import Ratting from "./Ratting";
 // import { addToWishlistApi, api, version } from "../../Api/Api";
 import { useDispatch, useSelector } from "react-redux";
-// import { addItem } from "../../Redux/Slices/cartSlice";
+import { addItem } from "../../../Redux/Slice/cartSlice";
+
 import AddToCartButton from "../../Layout/ButtonList/AddToCartButton";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Ensure you import the CSS
@@ -32,12 +33,8 @@ const PrimaryProductCard = ({
   finalPrice,
   regularPrice,
   slug,
-  discount,
-  ratting,
-  discountType,
   loading,
   onQuickView,
-  product,
   isVariant,
   quantity,
   productId,
@@ -73,68 +70,45 @@ const PrimaryProductCard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Product Details Page
   const handleProductFetch = async () => {
+    console.log("ok");
     navigate(`/product/${slug}`);
   };
-
   const handleAddToCart = () => {
-    // addd in Redux
     const newItem = {
-      productName: displayName,
-      productImage: productImage,
-      productPrice: finalPrice,
-      quantity: 1,
-      total_price: finalPrice, // Initial total price
-      selected: true,
-      slug: slug,
-      productId: productId,
-      variant: variant,
-      variantAttribute: variantAttribute,
-      tax: tax,
-      sku: sku,
-      vendorId: vendorId,
-      minPayable: finalPrice,
-      shippingCost: shippingCost,
-      codAvailable: codAvailable,
-      isVariant: isVariant,
-      discount: discount,
-      discountType: discountType,
-      weight: weight,
-      translations: translation, // Include the translations
+        productId: productId,
     };
 
     // Check if the product already exists in the cart
     const existingItemIndex = cartItems.findIndex(
-      (item) => item.productName === newItem.productName // Compare based on the product name or unique identifier
+        (item) => item.productId === newItem.productId // Compare based on productId
     );
 
     if (existingItemIndex !== -1) {
-      // If product exists, increase quantity and update total price
-      const existingItem = cartItems[existingItemIndex];
-      const updatedItem = {
-        ...existingItem,
-        quantity: existingItem.quantity + 1, // Increase quantity
-        total_price: existingItem.productPrice * (existingItem.quantity + 1), // Update total price
-      };
+        // If product exists, increase quantity
+        const existingItem = cartItems[existingItemIndex];
+        const updatedItem = {
+            ...existingItem,
+            quantity: existingItem.quantity + 1,
+        };
 
-      // Dispatch updated item to cart
-      dispatch(addItem(updatedItem)); // Update the item in cart
+        dispatch(addItem(updatedItem));
     } else {
-      // If product doesn't exist, add the new product to the cart
-      dispatch(addItem(newItem)); // Add new item to cart
+        // If product doesn't exist, add the new product to the cart
+        dispatch(addItem(newItem));
     }
 
     toast.success("Successfully added!", {
-      position: `${toastr_position}`,
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
+        position: `${toastr_position}`,
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
     });
-  };
+};
 
   // Add To WishList
   const handleAddToWishlist = async () => {
@@ -270,7 +244,7 @@ const PrimaryProductCard = ({
   const displayName = name;
 
   return (
-    <div className="group">
+    <div className="group pb-4"  >
       <div className="">
         {loading ? (
           <div className="border-[1px] border-skeletonLoading  ">
@@ -297,30 +271,22 @@ const PrimaryProductCard = ({
             <div className="button my-3 w-[60%] m-auto h-8 rounded-lg bg-skeletonLoading  animate-pulse"></div>
           </div>
         ) : (
-          <div className="relative border-[1px] border-primary border-opacity-[0.1]  overflow-hidden bg-secondary duration-300 group/outer  hover:border-theme h-auto z-[4] shadow-2xl">
+          <div className="relative border-[1px] border-tertiary border-opacity-[0.1]  overflow-hidden bg-secondary duration-300 group/outer  hover:border-tertiary hover:border-opacity-[0.3] hover:shadow-xl/20 h-auto z-[4]  " style={{ boxShadow: "0px 8px 10px 0px rgba(0 0 0 / 10%)" }}>
 
             <div className="">
               {/* Discount Badge */}
-              {discount > 0 && (
-                <div className="absolute top-1 sm:top-2 md:top-3 lg:top-4 left-1 sm:left-2 md:left-3 lg:left-4 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
+              {regularPrice < finalPrice && (
+                <div className="absolute  top-1 sm:top-2 md:top-3 lg:top-4 left-1 sm:left-2 md:left-3 lg:left-4 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
                   <p className="text-[12px] font-normal">
-                    {discountType === "2"
-                      ? `-${Number.isInteger(Number(discount))
-                        ? Number(discount)
-                        : Number(discount).toFixed(2)
-                      }%`
-                      : `-$${Number.isInteger(Number(discount))
-                        ? Number(discount)
-                        : Number(discount).toFixed(2)
-                      }`}
+                    {Math.round(((regularPrice - finalPrice) / regularPrice) * 100)}% OFF
                   </p>
                 </div>
               )}
 
               {/* Wishlist and Compare Icons */}
-              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/outer:opacity-100 transition-opacity duration-300 z-10">
+              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/outer:opacity-100 transition-opacity duration-300 z-10 ">
                 {/* Wishlist Button */}
-                <div className="relative ">
+                <div className="relative w-full">
                   <div
                     onClick={handleAddToWishlist}
                     className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
@@ -328,9 +294,9 @@ const PrimaryProductCard = ({
                     <FaRegHeart className="text-base" />
                     {/* Tooltip on icon hover */}
 
-                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3  py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
+                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3  py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
                       Wishlist
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <div className="relative ">
@@ -341,7 +307,7 @@ const PrimaryProductCard = ({
                     <BiGitCompare className="text-base" />
                     {/* Tooltip on icon hover */}
 
-                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
+                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
                       {(() => {
                         var fullText = "Compare";
                         var maxLength = 12;
@@ -349,7 +315,7 @@ const PrimaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <div className="relative w-full">
@@ -360,7 +326,7 @@ const PrimaryProductCard = ({
                     <FaEye className="text-base" />
                     {/* Tooltip on icon hover */}
 
-                    <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block block">
+                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block block">
                       {(() => {
                         const fullText = "Quick View";
                         const maxLength = 12;
@@ -368,7 +334,7 @@ const PrimaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </div>
@@ -376,23 +342,23 @@ const PrimaryProductCard = ({
               {/* Image container with dynamic aspect ratio */}
 
               <div
-                onClick={handleProductFetch}
-                className={`  relative
-        w-full   bg-gray-100 overflow-hidden cursor-pointer`}
+                
+                className={`relative w-full bg-gray-100 overflow-hidden cursor-pointer after:absolute after:inset-0 after:bg-primary after:opacity-0 after:transition-opacity after:duration-300 group-hover/outer:after:opacity-20`}
               >
                 {loading ? (
                   <div className="h-[250px] w-full animate-pulse bg-skeletonLoading"></div>
                 ) : (
                   // <div onClick={handleProductFetch} className="block">
                   <img
+                  onClick={handleProductFetch}
                     loading="lazy"
                     src={productImage}
                     alt={name}
-                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/4] "
+                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5]"
                   />
                   // </div>
                 )}
-                <div className="absolute bottom-0 w-full">
+                <div className="absolute bottom-0 w-full z-[10]">
                   {stock === "yes" ? (
                     <div className="">
                       {isVariant === true ? (
@@ -413,13 +379,13 @@ const PrimaryProductCard = ({
                           }
                         />
                       ) : (
-                        <div className=" grid-cols-1 gap-1 hidden group-hover:grid duration-500 delay-500 ">
+                        <div className="grid-cols-1 gap-1 grid transform transition-all duration-300 ease-out translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ">
                           <BuyNowButton
                             onClick={handleAddToCart}
                             className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[100%] m-auto"
                             // link={"/"}
                             text={(() => {
-                              const fullText = "Add to Cart"
+                              const fullText = "Buy Now"
 
                               const maxLength = 12;
                               return fullText.length > maxLength
@@ -487,25 +453,36 @@ const PrimaryProductCard = ({
                     }
                   />
                 </div>
-                <div className="price flex gap-2 py-[6px] md:py-2 lg:py-2 items-end ">
-                  <p className="text-[12px] md:text-[16px] font-semibold text-primary">
-                    {currency_symbol}
-                    {(
-                      finalPrice / (parseFloat(conversion_rate_to_tk) || 1)
-                    ).toFixed(2)}
-                  </p>
-                  {finalPrice !== regularPrice && (
-                    <span className="text-[10px] md:text-[12px] font-semibold text-gray-400 line-through">
+                <div className="flex justify-between pt-[6px] md:pt-2 lg:pt-2 items-center">
+
+                  <div className="price flex gap-2  items-end ">
+                    <p className="text-[12px] md:text-[16px] font-semibold font-normal text-primary">
                       {currency_symbol}
                       {(
-                        regularPrice / (parseFloat(conversion_rate_to_tk) || 1)
+                        finalPrice / (parseFloat(conversion_rate_to_tk) || 1)
                       ).toFixed(2)}
-                    </span>
-                  )}
+                    </p>
+                    {finalPrice !== regularPrice && (
+                      <span className="text-[10px] md:text-[12px] font-semibold font-normal text-gray-400 line-through">
+                        {currency_symbol}
+                        {(
+                          regularPrice / (parseFloat(conversion_rate_to_tk) || 1)
+                        ).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="">
+                    {
+                      stock === "yes" ?
+                        <MinTitle text="In Stock" className="text-green-500" />
+                        :
+                        <MinTitle text="Out Of Stock" className="text-red-500" />
+                    }
+                  </div>
                 </div>
-                <div className="m-auto pb-[6px] sm:pb-[10px] md:pb-[12px] lg:pb-[14px]">
-                  {/* <Ratting ratting={ratting} /> */}
-                </div>
+                {/* <div className="m-auto pb-[6px] sm:pb-[10px] md:pb-[12px] lg:pb-[14px]">
+                  <Ratting ratting={ratting} />
+                </div> */}
 
               </div>
             </div>

@@ -55,28 +55,25 @@ const cartSlice = createSlice({
     },
     addItem(state, action) {
       const newItem = action.payload;
+      
       // Check if item already exists in the cart
       const existingItemIndex = state.cartItems.findIndex(
-        (item) => item.slug === newItem.slug // Compare using slug instead of productName
+          (item) => item.productId === newItem.productId // Compare using productId only
       );
-    
+  
       if (existingItemIndex !== -1) {
-        // If the item exists, update the quantity and total price
-        state.cartItems[existingItemIndex] = {
-          ...state.cartItems[existingItemIndex],
-          quantity: state.cartItems[existingItemIndex].quantity + 1,
-          total_price: state.cartItems[existingItemIndex].productPrice * (state.cartItems[existingItemIndex].quantity + 1),
-        };
+          // If the item exists, update the quantity
+          state.cartItems[existingItemIndex].quantity += 1;
       } else {
-        // If the item doesn't exist, add it
-        state.cartItems.push({
-          ...newItem,
-          translations: newItem.translations, // Include translations
-        });
+          // If the item doesn't exist, add it with quantity 1
+          state.cartItems.push({
+              productId: newItem.productId,
+              quantity: 1,
+          });
       }
-    
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));  // Save to localStorage
-    },
+  
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+  },
     
     removeOrderedItems(state, action) {
       const orderedProductIds = action.payload; // Array of product IDs that were ordered
