@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Container from "../Layout/Container";
+import Container from "../../Layout/Container";
 
 // Import Swiper components and styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,14 +12,14 @@ import {
 } from "react-icons/md";
 // import SecondaryButton from "../../Layout/Button/SecondaryButton";
 // import PrimaryProductCard from "../ProductCard/PrimaryProductCard";
-import CategoryTitle from "../Layout/Title/CategoryTitle";
-import MinTitle from "../Layout/Title/MinTitle";
+import CategoryTitle from "../../Layout/Title/CategoryTitle";
+import MinTitle from "../../Layout/Title/MinTitle";
 // import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import ViewAllButton from "../Layout/ButtonList/ViewAllButton";
-import LargeTitle from "../Layout/Title/LargeTitle";
-import MidTitle from "../Layout/Title/MidTitle";
+import ViewAllButton from "../../Layout/Button/ViewAllButton";
+import LargeTitle from "../../Layout/Title/LargeTitle";
+import MidTitle from "../../Layout/Title/MidTitle";
 const CustomerReview = ({loading}) => {
   const navigate = useNavigate()
   const prevRef = useRef(null);

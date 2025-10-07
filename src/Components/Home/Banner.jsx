@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Container from '../Layout/Container'
-import ExtraLargeTitle from '../Layout/Title/ExtraLargeTitle'
-import MinTitle from '../Layout/Title/MinTitle'
-import PrimaryButton from '../Layout/ButtonList/PrimaryButton'
+import Container from '../../Layout/Container'
+import ExtraLargeTitle from '../../Layout/Title/ExtraLargeTitle'
+import MinTitle from '../../Layout/Title/MinTitle'
+import PrimaryButton from '../../Layout/Button/PrimaryButton'
 import bannerOne from "../../assets/Banner/bannerOne.png"
 import vector from "../../assets/Banner/vector.png"
 import subBrand1 from "../../assets/SubBrand/subBrand1.png"

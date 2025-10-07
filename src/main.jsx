@@ -13,6 +13,7 @@ import About from "./Pages/About.jsx";
 import Contact from "./Pages/Contact.jsx";
 import { Provider } from "react-redux";
 import store from "./Redux/Store/store.js";
+import SingleProduct from "./Pages/SingleProduct.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +37,11 @@ const router = createBrowserRouter([
         path: "/contact",
         index: true,
         element: <Contact />,
+      },
+      {
+        path: "/product/:name",
+        index: true,
+        element: <SingleProduct />,
       },
     ],
   },

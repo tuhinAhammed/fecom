@@ -1,6 +1,6 @@
 import React from 'react'
-import Container from '../Layout/Container'
-import MinTitle from '../Layout/Title/MinTitle'
+import Container from '../../Layout/Container'
+import MinTitle from '../../Layout/Title/MinTitle'
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
 
 const TopHeader = () => {

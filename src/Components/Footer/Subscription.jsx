@@ -1,9 +1,9 @@
 import React from 'react'
-import Container from '../Layout/Container'
-import LargeTitle from '../Layout/Title/LargeTitle'
+import Container from '../../Layout/Container'
+import LargeTitle from '../../Layout/Title/LargeTitle'
 import { MdOutlineMail } from 'react-icons/md'
 import { HiOutlineMail } from 'react-icons/hi'
-import PrimaryButton from '../Layout/ButtonList/PrimaryButton'
+import PrimaryButton from '../../Layout/Button/PrimaryButton'
 import { PiBellSimpleRingingBold } from 'react-icons/pi'
 const Subscription = () => {
     return (

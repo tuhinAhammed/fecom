@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import MinTitle from "../../Layout/Title/MinTitle";
-import PrimaryButton from "../../Layout/ButtonList/PrimaryButton";
+import MinTitle from "../Title/MinTitle";
+import PrimaryButton from "../Button/PrimaryButton";
 import { FaExchangeAlt, FaEye, FaRegHeart, FaStar } from "react-icons/fa";
 import { BiCartDownload, BiGitCompare } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 // import Ratting from "./Ratting";
 // import { addToWishlistApi, api, version } from "../../Api/Api";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../../Redux/Slice/cartSlice";
+import { addItem } from "../../Redux/Slice/cartSlice";
 
-import AddToCartButton from "../../Layout/ButtonList/AddToCartButton";
+import AddToCartButton from "../Button/AddToCartButton";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Ensure you import the CSS
 import { useState } from "react";
@@ -18,11 +18,11 @@ import axios from "axios";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaXmark } from "react-icons/fa6";
-import BuyNowButton from "../../Layout/ButtonList/BuyNowButton";
+import BuyNowButton from "../Button/BuyNowButton";
 import { MdAddShoppingCart, MdShoppingCartCheckout } from "react-icons/md";
-import SelectButton from "../../Layout/ButtonList/SelectButton";
+import SelectButton from "../Button/SelectButton";
 import { LiaCartArrowDownSolid, LiaCartPlusSolid } from "react-icons/lia";
-import { toastr_position } from "../../../Api";
+import { toastr_position } from "../../Api";
 import MidTitle from "../Title/MidTitle";
 // import { addCompareItem } from "../../Redux/Slices/compareSlice";
 const DOMAIN_NAME = import.meta.env.VITE_API_DOMAIN_NAME;
@@ -39,15 +39,8 @@ const PrimaryProductCard = ({
   quantity,
   productId,
   category,
-  variant,
-  variantAttribute,
-  tax,
+  variants,
   sku,
-  vendorId,
-  shippingCost,
-  codAvailable,
-  weight,
-  translation,
   stock
 }) => {
   // For Quick View Modals
@@ -70,8 +63,14 @@ const PrimaryProductCard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Product Details Page
   const handleProductFetch = async () => {
+    const productSlug = name
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '') // Remove special characters
+        .replace(/\s+/g, '-')    // Replace spaces with hyphens
+        .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
+        .trim();
     console.log("ok");
-    navigate(`/product/${slug}`);
+    navigate(`/product/${productSlug}` , {state : {productId : productId}});
   };
   const handleAddToCart = () => {
     const newItem = {
@@ -348,7 +347,7 @@ const PrimaryProductCard = ({
                 {loading ? (
                   <div className="h-[250px] w-full animate-pulse bg-skeletonLoading"></div>
                 ) : (
-                  // <div onClick={handleProductFetch} className="block">
+                  <div onClick={handleProductFetch} className="block">
                   <img
                   onClick={handleProductFetch}
                     loading="lazy"
@@ -356,7 +355,7 @@ const PrimaryProductCard = ({
                     alt={name}
                     className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5]"
                   />
-                  // </div>
+                   </div>
                 )}
                 <div className="absolute bottom-0 w-full z-[10]">
                   {stock === "yes" ? (

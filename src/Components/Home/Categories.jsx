@@ -1,13 +1,13 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules"; // Import the Autoplay module
-import Container from "../Layout/Container";
-import MidTitle from "../Layout/Title/MidTitle";
+import Container from "../../Layout/Container";
+import MidTitle from "../../Layout/Title/MidTitle";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
 import { Link, useNavigate } from "react-router-dom";
-import MinTitle from "../Layout/Title/MinTitle";
+import MinTitle from "../../Layout/Title/MinTitle";
 import { useSelector } from "react-redux";
 import emptyCategory from "../../assets/Category/emptyCategory.png"
 // import { api } from "../../Api/Api";

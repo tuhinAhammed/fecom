@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import PasswordInput from "../Layout/Input/PasswordInput";
-import LargeTitle from "../Layout/Title/LargeTitle";
+import PasswordInput from "../../Layout/Input/PasswordInput";
+import LargeTitle from "../../Layout/Title/LargeTitle";
 import { Link, useNavigate } from "react-router-dom";
-import SubmitButton from "../Layout/ButtonList/SubmitButton";
+import SubmitButton from "../../Layout/Button/SubmitButton";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 import { signInApi, signUnApi, toastr_position } from "../../Api";
 import { Bounce, toast } from "react-toastify";
 import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
-import UserAuthInput from "../Layout/Input/UserAuthInput";
+import UserAuthInput from "../../Layout/Input/UserAuthInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../Redux/Slice/userSlice";
-import SecondaryButton from "../Layout/ButtonList/SecondaryButton";
+import SecondaryButton from "../../Layout/Button/SecondaryButton";
 import { FiPlusCircle, FiLogIn } from "react-icons/fi";
 
 const googleValSitekey = "6LesUa8qAAAAAPuU_Aied1IqtR9_8BIQ9EmYasye";

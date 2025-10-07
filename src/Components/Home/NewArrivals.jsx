@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Container from "../Layout/Container";
+import Container from "../../Layout/Container";
 
 // Import Swiper components and styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,13 +12,13 @@ import {
 } from "react-icons/md";
 // import SecondaryButton from "../../Layout/Button/SecondaryButton";
 // import PrimaryProductCard from "../ProductCard/PrimaryProductCard";
-import CategoryTitle from "../Layout/Title/CategoryTitle";
-import MinTitle from "../Layout/Title/MinTitle";
+import CategoryTitle from "../../Layout/Title/CategoryTitle";
+import MinTitle from "../../Layout/Title/MinTitle";
 // import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import ViewAllButton from "../Layout/ButtonList/ViewAllButton";
-import PrimaryProductCard from "../Layout/ProductCard/PrimaryProductCard";
+import ViewAllButton from "../../Layout/Button/ViewAllButton";
+import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
 const NewArrivals = ({ productData, loading }) => {
   console.log('Product Data:', productData);
   const navigate = useNavigate()

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Container from '../Layout/Container'
+import Container from '../../Layout/Container'
 import sitelogo from "../../assets/Header/logo.png"
 import { NavLink } from 'react-router-dom'
-import HeaderSearch from '../Layout/SearchInput/HeaderSearch'
+import HeaderSearch from '../../Layout/SearchInput/HeaderSearch'
 import { LuShoppingCart } from 'react-icons/lu'
 import { FaRegHeart } from 'react-icons/fa'
 import { VscAccount } from 'react-icons/vsc'
-import HeaderOffCanvas from '../Layout/OffCanvas/HeaderOffCanvas'
+import HeaderOffCanvas from '../../Layout/OffCanvas/HeaderOffCanvas'
 import AccountContent from './AccountContent'
 import { useSelector } from 'react-redux'
 import CartTotal from '../Cart/CartTotal'
@@ -88,7 +88,7 @@ useEffect(() => {
       </Container>
 
       {/* ✅ Different OffCanvas for each */}
-      <HeaderOffCanvas isOpen={openDrawer === "cart"} onClose={handleClose} title="Cart" width="w-[40%]">
+      <HeaderOffCanvas isOpen={openDrawer === "cart"} onClose={handleClose} title={`Shopping Cart (${cartItemCount} Items)`} width="w-[40%]">
         <CartTotal />
       </HeaderOffCanvas>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../assets/Header/logo.png"
 import site_footer_logo from "../../assets/Header/logo.png"
-import MidTitle from "../Layout/Title/MidTitle";
+import MidTitle from "../../Layout/Title/MidTitle";
 import {
     FaArrowRightLong,
     FaInstagram,
@@ -13,14 +13,14 @@ import { IoIosCall, IoMdMail } from "react-icons/io";
 import { MdAddCall } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa";
-import MinTitle from "../Layout/Title/MinTitle";
+import MinTitle from "../../Layout/Title/MinTitle";
 import { AiOutlinePinterest, AiOutlineTikTok } from "react-icons/ai";
 import { ImPinterest } from "react-icons/im";
 import { PiThreadsLogoFill } from "react-icons/pi";
 import { TfiPinterest } from "react-icons/tfi";
 import { BsThreads } from "react-icons/bs";
-import Container from "../Layout/Container";
-import ExtraMinTitle from "../Layout/Title/ExtraMinTitle";
+import Container from "../../Layout/Container";
+import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import bkash from "../../assets/Footer/bkash.jpg";
 import dutch from "../../assets/Footer/dutch.jpg";
