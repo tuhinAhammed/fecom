@@ -13,7 +13,6 @@ import logo from "../assets/Header/logo.png"
 import LargeTitle from "../Layout/Title/LargeTitle";
 import MidTitle from "../Layout/Title/MidTitle";
 import AddToCartButton from "../Layout/Button/AddToCartButton";
-import BuyNowButton from "../Layout/Button/BuyNowButton";
 import MinTitle from "../Layout/Title/MinTitle";
 import ExtraMinTitle from "../Layout/Title/ExtraMinTitle";
 import { CiDeliveryTruck, CiShare2 } from "react-icons/ci";
@@ -30,6 +29,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { Navigation } from "swiper/modules";
 import { api, singleProductApi } from "../Api";
+import { MdBrightnessLow, MdOutlineBrightness1 } from "react-icons/md";
+import BuyNowButton from "../Layout/Button/BuyNowButton";
+import { CgPentagonTopRight } from "react-icons/cg";
 
 const SingleProduct = () => {
   const [productItem, setProductItem] = useState({});
@@ -377,8 +379,8 @@ console.log(productItem);
                       <div className="w-[60%] mt-3 h-3 rounded-lg bg-skeletonLoading animate-pulse"></div>
                     </div>
                   ) : (
-                    <MidTitle
-                      className="!text-[20px] md:!text-[24px] lg:!text-[28px] leading-[30px] md:!leading-[34px] lg:!leading-[38px] !font-medium !text-primary"
+                    <LargeTitle
+                      className=" leading-[30px] md:!leading-[34px] lg:!leading-[38px] !font-medium !text-primary"
                       text={productItem?.product_name}
                     />
                 )} 
@@ -438,10 +440,9 @@ console.log(productItem);
 
                   {/* Variants (Sizes) */}
                   {productItem?.variants?.length > 0 && (
-                    <div className="pt-4 pb-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        <MidTitle className="font-medium" text="Size" />:
-                      </div>
+                    <div className="py-6">
+                      <div className="flex items-center gap-6 mb-2">
+                        <MidTitle className="font-medium" text="Select Size" />:
                       <div className="flex flex-wrap gap-2">
                         {productItem.variants.map((variant, index) => (
                           <button
@@ -462,13 +463,17 @@ console.log(productItem);
                           </button>
                         ))}
                       </div>
+                      </div>
                     </div>
                   )}
 
                   {/* Quantity Select */}
+                  <div className="flex items-center gap-6 pb-8">
+                        <MidTitle className="font-medium" text="Quantity" />:
+
                   {isInStock && (
                     <div
-                      className={`flex w-40 justify-between bg-white rounded-md border border-gray-300 mb-5 mt-2 `}
+                      className={`flex w-40 justify-between bg-white rounded-md border border-gray-300  `}
                     >
                       <button
                         onClick={decrement}
@@ -495,6 +500,7 @@ console.log(productItem);
                       </button>
                     </div>
                   )}
+                        </div>
 
                   {/* Action Button */}
                   {isInStock && (
@@ -508,7 +514,7 @@ console.log(productItem);
                         <div className="grid grid-cols-2 gap-4 sm:w-[60%] md:w-full lg:w-[70%] pb-6 md:pb-8">
                           <AddToCartButton
                             onClick={handleAddToCart}
-                            className=" "
+                            className="!text-base rounded-md"
                             text={(() => {
                               const fullText = "Add to Cart";
                               const maxLength = 12;
@@ -522,9 +528,12 @@ console.log(productItem);
                           />
                           <BuyNowButton
                             onClick={handleBuyNow}
-                            className="!inline "
+                            className=" !text-base rounded-md"
+                            icon={
+                              <CgPentagonTopRight  className="font-bold text-lg" />
+                            }
                             text={(() => {
-                              const fullText = "Buy Now";
+                              const fullText = "Order Now";
                               const maxLength = 12;
                               return fullText.length > maxLength
                                 ? fullText.slice(0, maxLength - 1) + "…"

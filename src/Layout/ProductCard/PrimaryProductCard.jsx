@@ -8,7 +8,6 @@ import { Link, useNavigate } from "react-router-dom";
 // import { addToWishlistApi, api, version } from "../../Api/Api";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../Redux/Slice/cartSlice";
-
 import AddToCartButton from "../Button/AddToCartButton";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Ensure you import the CSS
@@ -24,6 +23,7 @@ import SelectButton from "../Button/SelectButton";
 import { LiaCartArrowDownSolid, LiaCartPlusSolid } from "react-icons/lia";
 import { toastr_position } from "../../Api";
 import MidTitle from "../Title/MidTitle";
+import { CgPentagonTopRight } from "react-icons/cg";
 // import { addCompareItem } from "../../Redux/Slices/compareSlice";
 const DOMAIN_NAME = import.meta.env.VITE_API_DOMAIN_NAME;
 
@@ -392,7 +392,7 @@ const PrimaryProductCard = ({
                                 : fullText;
                             })()}
                             icon={
-                              <LiaCartPlusSolid className="font-bold text-lg" />
+                              <CgPentagonTopRight  className="font-bold text-lg" />
                             }
                           // slug={slug}
                           />
