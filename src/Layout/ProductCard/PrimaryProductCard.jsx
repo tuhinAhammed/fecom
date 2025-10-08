@@ -341,25 +341,27 @@ const PrimaryProductCard = ({
               {/* Image container with dynamic aspect ratio */}
 
               <div
-                
-                className={`relative w-full bg-gray-100 overflow-hidden cursor-pointer after:absolute after:inset-0 after:bg-primary after:opacity-0 after:transition-opacity after:duration-300 group-hover/outer:after:opacity-20`}
-              >
+  className={`relative w-full bg-gray-100 overflow-hidden cursor-pointer 
+  after:absolute after:inset-0 after:bg-primary after:opacity-0 
+  after:transition-opacity after:duration-300 group-hover/outer:after:opacity-20 
+  after:pointer-events-none`}  // 👈 this fixes it
+>
                 {loading ? (
                   <div className="h-[250px] w-full animate-pulse bg-skeletonLoading"></div>
                 ) : (
-                  <div onClick={handleProductFetch} className="block">
+                  <div  className="block">
                   <img
                   onClick={handleProductFetch}
                     loading="lazy"
                     src={productImage}
                     alt={name}
-                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5]"
+                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5] "
                   />
                    </div>
                 )}
-                <div className="absolute bottom-0 w-full z-[10]">
+                <div className="absolute bottom-0 w-full z-[10]" >
                   {stock === "yes" ? (
-                    <div className="">
+                    <div className="" >
                       {isVariant === true ? (
                         <SelectButton
                           onClick={handleViewModal}

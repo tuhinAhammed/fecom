@@ -55,25 +55,25 @@ const cartSlice = createSlice({
     },
     addItem(state, action) {
       const newItem = action.payload;
-      
-      // Check if item already exists in the cart
       const existingItemIndex = state.cartItems.findIndex(
-          (item) => item.productId === newItem.productId // Compare using productId only
+        (item) =>
+          item.productId === newItem.productId &&
+          item.variant === newItem.variant
       );
-  
+    
       if (existingItemIndex !== -1) {
-          // If the item exists, update the quantity
-          state.cartItems[existingItemIndex].quantity += 1;
+        state.cartItems[existingItemIndex].quantity += newItem.quantity;
       } else {
-          // If the item doesn't exist, add it with quantity 1
-          state.cartItems.push({
-              productId: newItem.productId,
-              quantity: 1,
-          });
+        state.cartItems.push({
+          productId: newItem.productId,
+          quantity: newItem.quantity,
+          variant: newItem.variant || null,
+        });
       }
-  
+    
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-  },
+    },
+    
     
     removeOrderedItems(state, action) {
       const orderedProductIds = action.payload; // Array of product IDs that were ordered

@@ -19,7 +19,7 @@ export default {
         "2xl": "3080px", // Extra large devices
       },
       colors: {
-        theme: "#fa6219", // Website Theme Color
+        theme: "#FF3C37", // Website Theme Color
         primary: "#000", // Text Like black
         secondary: "#fff", // text White
         tertiary: "#616060",
@@ -28,7 +28,7 @@ export default {
         themeDeep : "#000000",
         footerBg : "#4C4C4C",
         lightThemeBg : "#E5F2FF", // for light theme background color
-        buttonHover :"#ca5821",
+        buttonHover :"#E0322D",
         borderColor : "#CCCCCC",
         skeletonLoading : "#cbd5e1"
       },
