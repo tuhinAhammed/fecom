@@ -37,22 +37,21 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems)); // Save to localStorage
     },
     updateCartSummary(state, action) {
-      const { index, quantity } = action.payload;
+      const { index, quantity, variant } = action.payload;
       const item = state.cartItems[index];
-
-      // Ensure quantity is at least 1
-      if (quantity < 1) {
-        console.log("Quantity cannot be less than 1."); // Optional: Log a warning
-        return;
+      if (!item) return;
+    
+      if (quantity !== undefined && quantity >= 1) {
+        item.quantity = quantity;
       }
-
-      // Update item quantity and total price
-      item.quantity = quantity;
-      item.total_price = item.productPrice * quantity;
-
-      // Save updated cart to localStorage
+      if (variant !== undefined) {
+        item.variant = variant;
+      }
+    
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
+    
+    
     addItem(state, action) {
       const newItem = action.payload;
       const existingItemIndex = state.cartItems.findIndex(

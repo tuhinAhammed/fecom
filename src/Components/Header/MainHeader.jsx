@@ -88,9 +88,9 @@ useEffect(() => {
       </Container>
 
       {/* ✅ Different OffCanvas for each */}
-      <HeaderOffCanvas isOpen={openDrawer === "cart"} onClose={handleClose} title={`Shopping Cart (${cartItemCount} Items)`} width="w-[40%]">
-        <CartTotal />
-      </HeaderOffCanvas>
+      <HeaderOffCanvas isOpen={openDrawer === "cart"} onClose={handleClose} title={`Shopping Cart (${cartItemCount} Items)`} width="w-[35%]">
+  <CartTotal onClose={handleClose} />
+</HeaderOffCanvas>
 
       <HeaderOffCanvas isOpen={openDrawer === "wishlist"} onClose={handleClose} title="Wishlist" width="w-[30%]">
         <WishlistContent />

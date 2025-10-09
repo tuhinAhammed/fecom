@@ -396,7 +396,7 @@ console.log(productItem);
                       )}
                     </div>
                   </div>
-                  <div className="" style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}>
+                  <div className="">
                     {loading ? (
                       <div className="py-3">
                         <div className="w-full h-4 rounded-lg bg-skeletonLoading animate-pulse"></div>
@@ -438,7 +438,7 @@ console.log(productItem);
                               {/* Discount Badge */}
                               {regularPrice > finalPrice && (
                                 <MinTitle
-                                className=" font-normal text-green-500 cursor-pointer px-3  py-1 rounded-full bg-green-500 bg-opacity-[0.2] font-semibold inline-block"
+                                className=" font-normal text-green-500 px-3  py-1 rounded-full bg-green-500 bg-opacity-[0.2] font-semibold inline-block"
                                 text={`${Math.round(((regularPrice - finalPrice) / regularPrice) * 100)}% OFF`}
                               />
 
@@ -516,7 +516,7 @@ console.log(productItem);
                       <div className="text-[14px] md:text-[14px] lg:text-[16px] font-medium text-gray-400 line-through md:h-4 lg:h-6 w-8 md:w-12 lg:w-32 rounded-md  bg-skeletonLoading animate-pulse "></div>
                     </div>
                     :
-                    <div className="flex items-center gap-6 py-2 md:py-6">
+                    <div className="flex items-center gap-6 pb-2 md:pb-6 pt-2 md:pt-3">
                       <MidTitle className="font-medium" text="Quantity" />:
 
                       {isInStock && (

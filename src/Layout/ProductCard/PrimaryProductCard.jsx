@@ -64,50 +64,52 @@ const PrimaryProductCard = ({
   // Product Details Page
   const handleProductFetch = async () => {
     const productSlug = name
-        .toLowerCase()
-        .replace(/[^\w\s]/g, '') // Remove special characters
-        .replace(/\s+/g, '-')    // Replace spaces with hyphens
-        .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
-        .trim();
+      .toLowerCase()
+      .replace(/[^\w\s]/g, '') // Remove special characters
+      .replace(/\s+/g, '-')    // Replace spaces with hyphens
+      .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
+      .trim();
     console.log("ok");
-    navigate(`/product/${productSlug}` , {state : {productId : productId}});
+    navigate(`/product/${productSlug}`, { state: { productId: productId } });
   };
   const handleAddToCart = () => {
     const newItem = {
-        productId: productId,
+      productId: productId,
+      quantity: 1,                             // Default quantity
+      variant:  null,
     };
 
     // Check if the product already exists in the cart
     const existingItemIndex = cartItems.findIndex(
-        (item) => item.productId === newItem.productId // Compare based on productId
+      (item) => item.productId === newItem.productId // Compare based on productId
     );
 
     if (existingItemIndex !== -1) {
-        // If product exists, increase quantity
-        const existingItem = cartItems[existingItemIndex];
-        const updatedItem = {
-            ...existingItem,
-            quantity: existingItem.quantity + 1,
-        };
+      // If product exists, increase quantity
+      const existingItem = cartItems[existingItemIndex];
+      const updatedItem = {
+        ...existingItem,
+        quantity: existingItem.quantity + 1,
+      };
 
-        dispatch(addItem(updatedItem));
+      dispatch(addItem(updatedItem));
     } else {
-        // If product doesn't exist, add the new product to the cart
-        dispatch(addItem(newItem));
+      // If product doesn't exist, add the new product to the cart
+      dispatch(addItem(newItem));
     }
 
     toast.success("Successfully added!", {
-        position: `${toastr_position}`,
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+      position: `${toastr_position}`,
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
     });
-};
+  };
 
   // Add To WishList
   const handleAddToWishlist = async () => {
@@ -341,23 +343,23 @@ const PrimaryProductCard = ({
               {/* Image container with dynamic aspect ratio */}
 
               <div
-  className={`relative w-full bg-gray-100 overflow-hidden cursor-pointer 
+                className={`relative w-full bg-gray-100 overflow-hidden cursor-pointer 
   after:absolute after:inset-0 after:bg-primary after:opacity-0 
   after:transition-opacity after:duration-300 group-hover/outer:after:opacity-20 
   after:pointer-events-none`}  // 👈 this fixes it
->
+              >
                 {loading ? (
                   <div className="h-[250px] w-full animate-pulse bg-skeletonLoading"></div>
                 ) : (
-                  <div  className="block">
-                  <img
-                  onClick={handleProductFetch}
-                    loading="lazy"
-                    src={productImage}
-                    alt={name}
-                    className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5] "
-                  />
-                   </div>
+                  <div className="block">
+                    <img
+                      onClick={handleProductFetch}
+                      loading="lazy"
+                      src={productImage}
+                      alt={name}
+                      className="w-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center aspect-[4/5] "
+                    />
+                  </div>
                 )}
                 <div className="absolute bottom-0 w-full z-[10]" >
                   {stock === "yes" ? (
@@ -394,7 +396,7 @@ const PrimaryProductCard = ({
                                 : fullText;
                             })()}
                             icon={
-                              <CgPentagonTopRight  className="font-bold text-lg" />
+                              <CgPentagonTopRight className="font-bold text-lg" />
                             }
                           // slug={slug}
                           />

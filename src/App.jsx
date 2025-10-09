@@ -8,6 +8,7 @@ import { Outlet } from 'react-router-dom'
 import MainFooter from './Components/Footer/MainFooter'
 import Subscription from './Components/Footer/Subscription'
 import { Bounce, ToastContainer } from 'react-toastify'
+import ScrollToTop from './Utils/scrollToTop'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +30,7 @@ function App() {
             theme="light"
             transition={Bounce}
           />
+          <ScrollToTop/>
     <Outlet />
     <Subscription/>
     <MainFooter/>

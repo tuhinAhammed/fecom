@@ -10,6 +10,7 @@ export const singleProductApi = `${baseApi}/product/`;
 
 
 
-
+export const currency_symbol = "৳"
+export const conversion_rate_to_tk = "0"
 // ToasterPosition
 export const toastr_position = "top-right"
