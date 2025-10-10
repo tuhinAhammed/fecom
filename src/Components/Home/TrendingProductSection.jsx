@@ -19,7 +19,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ViewAllButton from "../../Layout/Button/ViewAllButton";
 import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
-const NewArrivals = ({ productData, loading }) => {
+const TrendingProductSection = ({ productData, loading }) => {
   console.log('Product Data:', productData);
   const navigate = useNavigate()
   const prevRef = useRef(null);
@@ -30,7 +30,7 @@ const NewArrivals = ({ productData, loading }) => {
   // console.log(productData);
 
   const handleGoPage = () => {
-    navigate("/new-arrivals");
+    navigate("/trending-products");
   };
 
   // Page Translation
@@ -39,7 +39,7 @@ const NewArrivals = ({ productData, loading }) => {
   //   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
   // );
 
-  const sectionTitleText = "New Arrivals"
+  const sectionTitleText = "Trending Products"
   return (
     <>
       {productData?.length > 0 && (
@@ -62,7 +62,7 @@ const NewArrivals = ({ productData, loading }) => {
                   <div className="flex space-x-2">
                     <div
                       ref={prevRef}
-                      className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep  border-[1px] border-tertiary border-opacity-[0.2]"
+                      className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep border-[1px] border-tertiary border-opacity-[0.2]"
                       style={{ boxShadow: "0px 6px 16px rgba(0,0,0,0.15)" }}
                     >
                       <MdOutlineArrowBackIosNew />
@@ -148,4 +148,4 @@ const NewArrivals = ({ productData, loading }) => {
   );
 };
 
-export default NewArrivals;
+export default TrendingProductSection;

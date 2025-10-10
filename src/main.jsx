@@ -14,6 +14,8 @@ import Contact from "./Pages/Contact.jsx";
 import { Provider } from "react-redux";
 import store from "./Redux/Store/store.js";
 import SingleProduct from "./Pages/SingleProduct.jsx";
+import NewArrivals from "./Pages/NewArrivals.jsx";
+import TrendingProduct from "./Pages/TrendingProduct.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +40,17 @@ const router = createBrowserRouter([
         index: true,
         element: <Contact />,
       },
+      {
+        path: "/new-arrivals",
+        index: true,
+        element: <NewArrivals />,
+      },
+      {
+        path: "/trending-products",
+        index: true,
+        element: <TrendingProduct />,
+      },
+      
       {
         path: "/product/:name",
         index: true,

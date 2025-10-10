@@ -170,7 +170,7 @@ const MinCartCard = ({
                         {/* Variant Selection */}
                         {variants && variants.length > 0 && (
                             <div className="mt-2 flex gap-6">
-                                <div className="flex items-center gap-2 mb-1">
+                                <div className="flex items-center gap-2 ">
                                     <MinTitle
                                         className="font-normal text-xs sm:text-sm md:text-base"
                                         text={`${productVarient == null ? "Select Size" : "Size"}   `}
@@ -178,7 +178,7 @@ const MinCartCard = ({
                                     :
                                 </div>
 
-                                <div className="flex flex-wrap gap-2 pt-1">
+                                <div className="flex flex-wrap gap-2 ">
                                     {variants.map((variant, vIndex) => (
                                         <button
                                             key={vIndex}

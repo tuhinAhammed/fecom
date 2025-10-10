@@ -25,7 +25,7 @@ export default {
         tertiary: "#616060",
         quaternary : "#F4F4F5",
         static : "#000",
-        themeDeep : "#000000",
+        themeDeep : "#E0322D",
         footerBg : "#4C4C4C",
         lightThemeBg : "#E5F2FF", // for light theme background color
         buttonHover :"#E0322D",

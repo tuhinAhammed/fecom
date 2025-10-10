@@ -7,6 +7,10 @@ import NewArrivals from '../Components/Home/NewArrivals'
 import CustomerReview from '../Components/Home/CustomerReview'
 import Categories from '../Components/Home/Categories'
 import { fetchLandingPageData } from '../Redux/Slice/landingPageSlice.js'
+import TrendingProductSection from '../Components/Home/TrendingProductSection.jsx'
+import CategoryBanner from '../Components/Home/Advertise.jsx'
+import Advertise from '../Components/Home/Advertise.jsx'
+import AllProduct from '../Components/Home/AllProduct.jsx'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -51,7 +55,11 @@ const Home = () => {
       <Banner />
       <Categories />
       <NewArrivals productData={landingData?.products?.all} loading={loading} />
-      <CustomerReview />
+      <TrendingProductSection productData={landingData?.products?.trendings} loading={loading} />
+      <Advertise/>
+      <AllProduct productData={landingData?.products?.all} loading={loading} />
+
+      {/* <CustomerReview /> */}
     </div>
   )
 }

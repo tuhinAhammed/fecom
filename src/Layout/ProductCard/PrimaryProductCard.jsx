@@ -367,7 +367,7 @@ const PrimaryProductCard = ({
                       {isVariant === true ? (
                         <SelectButton
                           onClick={handleViewModal}
-                          className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[70%] m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
+                          className="w-full m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
                           // link={"/"}
                           text={(() => {
                             const fullText = "Select";
@@ -385,7 +385,7 @@ const PrimaryProductCard = ({
                         <div className="grid-cols-1 gap-1 grid transform transition-all duration-300 ease-out translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ">
                           <BuyNowButton
                             onClick={handleAddToCart}
-                            className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[100%] m-auto"
+                            className="w-full m-auto"
                             // link={"/"}
                             text={(() => {
                               const fullText = "Buy Now"
@@ -402,7 +402,7 @@ const PrimaryProductCard = ({
                           />
                           <AddToCartButton
                             onClick={handleAddToCart}
-                            className="w-[80%] sm:w-[80%] md:w-[65%] lg:w-[70%] xl:w-[100%] m-auto"
+                            className="w-full m-auto"
                             // link={"/"}
                             text={(() => {
                               const fullText = "Add to Cart"

@@ -7,8 +7,9 @@ import PrimaryButton from '../../Layout/Button/PrimaryButton'
 import { PiBellSimpleRingingBold } from 'react-icons/pi'
 const Subscription = () => {
     return (
+        <div className="py-sectionLg">
         <Container>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 lg:gap-24 py-6 sm:py-8 md:py-10 lg:py-12 px-8 sm:px-10 md:px-12 lg:px-16 bg-primary rounded-2xl">
+            <div className="grid items-center grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 lg:gap-24 py-6 sm:py-8 md:py-10 lg:py-12 px-8 sm:px-10 md:px-12 lg:px-16 bg-primary rounded-2xl">
                 <div className='col-span-1 lg:col-span-7'>
                     <LargeTitle className="!text-4xl font-tertiary font-bold text-secondary" text="STAY UPTO DATE ABOUT OUR LATEST OFFERS" />
                 </div>
@@ -31,6 +32,7 @@ const Subscription = () => {
                 </div>
             </div>
         </Container>
+        </div>
     )
 }
 

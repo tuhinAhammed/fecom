@@ -9,6 +9,7 @@ import MainFooter from './Components/Footer/MainFooter'
 import Subscription from './Components/Footer/Subscription'
 import { Bounce, ToastContainer } from 'react-toastify'
 import ScrollToTop from './Utils/scrollToTop'
+import SupportDetails from './Components/Footer/SupportDetails'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -33,6 +34,7 @@ function App() {
           <ScrollToTop/>
     <Outlet />
     <Subscription/>
+    <SupportDetails/>
     <MainFooter/>
     </>
   )
