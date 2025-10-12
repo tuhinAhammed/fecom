@@ -34,7 +34,7 @@ useEffect(() => {
   const handleClose = () => setOpenDrawer(null)
 
   return (
-    <div className='z-[8] py-2 sticky top-0 w-full bg-secondary shadow-md'>
+    <div className='z-[8] py-2 sticky top-0 w-full bg-secondary shadow-md m'>
       <Container>
         <div className="flex items-center justify-between">
           <div className="">
