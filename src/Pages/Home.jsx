@@ -53,7 +53,7 @@ const Home = () => {
   return (
     <div className='text-4xl font-tertiary'>
       <Banner />
-      <Categories />
+      {/* <Categories /> */}
       <NewArrivals productData={landingData?.products?.all} loading={loading} />
       <TrendingProductSection productData={landingData?.products?.trendings} loading={loading} />
       <Advertise/>

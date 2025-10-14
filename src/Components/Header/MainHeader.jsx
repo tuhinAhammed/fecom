@@ -34,7 +34,7 @@ useEffect(() => {
   const handleClose = () => setOpenDrawer(null)
 
   return (
-    <div className='z-[8] py-2 sticky top-0 w-full bg-secondary shadow-md m'>
+    <div className='z-[8] py-0 sticky top-0 w-full bg-secondary shadow-md m'>
       <Container>
         <div className="flex items-center justify-between">
           <div className="">
@@ -44,7 +44,7 @@ useEffect(() => {
               <img
                 src={sitelogo}
                 alt="Logo"
-                className="w-[80px] sm:w-[90px] md:w-[140px] lg:w-[180px]"
+                className="w-[80px] sm:w-[90px] md:w-[140px] lg:w-[150px] "
               />
             </NavLink>
           </div>

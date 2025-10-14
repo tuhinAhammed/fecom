@@ -10,6 +10,7 @@ import Subscription from './Components/Footer/Subscription'
 import { Bounce, ToastContainer } from 'react-toastify'
 import ScrollToTop from './Utils/scrollToTop'
 import SupportDetails from './Components/Footer/SupportDetails'
+import Categories from './Components/Home/Categories'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,6 +19,7 @@ function App() {
     <>
     <TopHeader/>
     <MainHeader/>
+    <Categories/>
     <ToastContainer
             position="top-left"
             autoClose={3000}
