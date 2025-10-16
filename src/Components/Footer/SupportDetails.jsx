@@ -33,29 +33,29 @@ const bgImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ix
 const SupportDetails = () => {
   return (
     <div 
-      className="py-16 bg-cover bg-center bg-fixed relative"
+      className="py-sectionSm md:py-sectionLg bg-cover bg-center bg-fixed relative"
       style={{
         backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${bgImage})`
       }}
     >
       <Container>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {supportData.map((item, index) => (
             <div
               key={index}
               className="text-center group "
             >
-              <div className="relative mb-6">
+              <div className="relative mb-2 md:mb-6">
                 {/* <div className="absolute inset-0 bg-white rounded-full blur-md group-hover:blur-lg transition-all duration-300 opacity-20 group-hover:opacity-30"></div> */}
-                <div className="relative bg-white bg-opacity-10 backdrop-blur-md rounded-full w-20 h-20 flex items-center justify-center mx-auto border border-white border-opacity-20 group-hover:border-opacity-40 transition-all duration-300">
-                  <p className="text-white text-2xl group-hover:scale-110 transition-transform duration-300">
+                <div className="relative bg-white bg-opacity-10 backdrop-blur-md rounded-full w-12 md:w-20 h-12 md:h-20 flex items-center justify-center mx-auto border border-white border-opacity-20 group-hover:border-opacity-40 transition-all duration-300">
+                  <p className="text-white text-base md:text-2xl group-hover:scale-110 transition-transform duration-300">
                     {item.icon}
                   </p>
                 </div>
               </div>
               
               <MidTitle 
-                className="font-bold text-white mb-3 group-hover:text-gray-200 transition-colors duration-300" 
+                className="font-bold text-white mb-1 md:mb-3 group-hover:text-gray-200 transition-colors duration-300" 
                 text={item.title} 
               />
               <ExtraMinTitle 

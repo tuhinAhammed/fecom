@@ -32,24 +32,25 @@ const Banner = () => {
     return (
         <div>
             <Container>
-                <div className="grid grid-cols-1 md:grid-cols-12 items-start gap-24 ">
-                    <div className="col-span-1 md:col-span-5 pt-12">
-                        <ExtraLargeTitle className="font-black font-secondary" text="Find Clothes That Matches Your Style" />
-                        <MinTitle className="text-tertiary font-secondary py-3 sm:py-4 md:py-8" text="Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style." />
+                <div className="grid grid-cols-1 md:grid-cols-12 items-start gap-6 md:gap-20 lg:gap-24 ">
+                    <div className="col-span-1 md:col-span-5 pt-24 sm:pt-16">
+                        <ExtraLargeTitle className="w-[70%] md:w-full font-black font-secondary" text="Find Clothes That Matches Your Style" />
+                        <p className="text-base text-tertiary py-6 sm:py-4 md:py-8 ">Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
+                        {/* <MinTitle className="text-tertiary  font-secondary py-3 sm:py-4 md:py-8" text="Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style." /> */}
                         <PrimaryButton slug="shop" className="w-[50%]" text="Shop Now" />
                         {/* Counter */}
-                        <div className="grid grid-cols-3 gap-4 items-center py-10">
+                        <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 items-center py-10">
                             <div className="">
-                                <ExtraLargeTitle className="!text-4xl font-semibold" text="200+" />
-                                <MinTitle className="text-tertiary" text="Greatfull Branch" />
+                                <ExtraLargeTitle className="text-center md:text-left !text-xl md:!text-2xl lg:!text-4xl font-semibold" text="200+" />
+                                <MinTitle className="text-center md:text-left text-tertiary" text="Greatfull Branch" />
                             </div>
                             <div className="">
-                                <ExtraLargeTitle className="!text-4xl font-semibold" text="2000+" />
-                                <MinTitle className="text-tertiary" text="High-Quality Products" />
+                                <ExtraLargeTitle className="text-center md:text-left !text-xl md:!text-2xl lg:!text-4xl font-semibold" text="2000+" />
+                                <MinTitle className="text-center md:text-left text-tertiary" text="High-Quality Products" />
                             </div>
                             <div className="">
-                                <ExtraLargeTitle className="!text-4xl font-semibold" text="30,000+" />
-                                <MinTitle className="text-tertiary" text="Happy Customers" />
+                                <ExtraLargeTitle className="text-center md:text-left !text-xl md:!text-2xl lg:!text-4xl font-semibold" text="30,000+" />
+                                <MinTitle className="text-center md:text-left text-tertiary" text="Happy Customers" />
                             </div>
                         </div>
                     </div>
@@ -75,10 +76,10 @@ const Banner = () => {
             </Container>
             <div className="bg-primary py-10 ">
                 <Container>
-                <div className="flex justify-between items-center">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-6 justify-center items-center">
                 {
                     subBrandData.map((item , index) => (
-                        <div className="">
+                        <div className="m-auto">
                             <img src={item.img} alt="" />
                         </div>
                     ))

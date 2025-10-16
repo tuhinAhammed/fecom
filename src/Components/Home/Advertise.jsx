@@ -51,7 +51,7 @@ const Advertise = () => {
   return (
     <>
       {advertiseData.length > 0 && (
-        <div className="py-sectionLg relative">
+        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg relative">
           {/* <Container> */}
             {/* Swiper with autoplay for small devices and no autoplay for others */}
             <Swiper
@@ -87,7 +87,7 @@ const Advertise = () => {
                     <Link to={item.link}>
                       <div
                         className="relative w-full  overflow-hidden 
-             max-h-[120px] sm:max-h-[150px] md:max-h-[450px] 
+             max-h-[200px] sm:max-h-[250px] md:max-h-[450px] 
              aspect-[5/3] bg-gray-200 cursor-pointer 
              group hover:after:opacity-20 after:absolute after:inset-0 
              after:bg-primary after:opacity-0 after:transition-opacity 
@@ -104,7 +104,7 @@ const Advertise = () => {
                         {/* Overlay content */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white z-10">
                           <LargeTitle className="text-secondary !font-bold" text={item.name}/>
-                          <MinTitle className="py-4 px-36" text={item.desc}/>
+                          <MinTitle className="py-4 px-4 md:px-36" text={item.desc}/>
                           <SecondaryButton className="!bg-theme hover:!bg-themeDeep !text-secondary mt-1" text="Shop Now"/>
                         </div>
 

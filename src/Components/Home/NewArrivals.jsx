@@ -43,7 +43,7 @@ const NewArrivals = ({ productData, loading }) => {
   return (
     <>
       {productData?.length > 0 && (
-        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionXl bg-secondary ">
+        <div className="pt-sectionSm md:pt-sectionMd lg:pt-sectionLg  bg-secondary ">
           <Container>
             <div
               className="rounded-md"

@@ -33,7 +33,7 @@ const Categories = () => {
   };
 
   return (
-    <div className="z-[8] py-0 sticky top-20 w-full bg-secondary shadow-md border-y border-borderColor">
+    <div className=" w-full bg-secondary shadow-md border-y border-borderColor border-opacity-[0.7] hidden md:block">
       <Container>
         {activeCategories.length > 0 && (
           <div className="relative py-2">
@@ -80,7 +80,7 @@ const Categories = () => {
 
                     {/* ✅ Show vertical line between all slides except the last one */}
                     {index !== activeCategories.length - 1 && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-8 bg-borderColor z-[5]" />
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-8 bg-opacity-[0.7] bg-borderColor z-[5]" />
                     )}
                   </SwiperSlide>
                 );

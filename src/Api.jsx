@@ -7,6 +7,7 @@ export const signUnApi = `${baseApi}/registration`;
 export const categoryListApi = `${baseApi}/category/list`;
 export const langingPageApi = `${baseApi}/landing-page`;
 export const singleProductApi = `${baseApi}/product/`;
+export const subscriptionPost = `${baseApi}/subscribe`;
 
 
 

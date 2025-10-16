@@ -17,9 +17,9 @@ function App() {
 
   return (
     <>
-    <TopHeader/>
+    {/* <TopHeader/> */}
     <MainHeader/>
-    <Categories/>
+    {/* <Categories/> */}
     <ToastContainer
             position="top-left"
             autoClose={3000}

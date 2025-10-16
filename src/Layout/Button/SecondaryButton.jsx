@@ -20,7 +20,7 @@ const SecondaryButton = ({ text, className, slug , icon , disabled}) => {
     <div
       onClick={handleButtonClick}
       disabled={disabled}
-      className={`text-[11px] sm:text-[12px] md:text-sm lg:text-base text-center px-1 sm:px-[2px] md:px-5 py-[4px] sm:py-[6px] md:py-[6px] lg:py-3   bg-transparent text-primary rounded-sm hover:bg-theme hover:text-secondary cursor-pointer
+      className={`text-xs md:text-sm lg:text-base text-center px-2 sm:px-4 md:px-5 py-[4px] sm:py-[6px] md:py-[6px] lg:py-3   bg-transparent text-primary rounded-sm hover:bg-theme hover:text-secondary cursor-pointer
     duration-300 active:bg-buttonHover active:border-buttonHover  border-[1px] border-theme hover:border-buttonHover flex items-center gap-1 md:gap-2  justify-center ${
       isClicked ? "bg-buttonHover" : ""
     } ${className}`}
