@@ -56,13 +56,10 @@ const CartTotal = ({ isVisibleValue, onClose }) => {
     (acc, item) => {
       const price = item.offer_price || 0;
       const quantity = item.quantity || 0;
-      console.log(`Item ${item.id}: price=${price}, quantity=${quantity}, subtotal=${price * quantity}`);
       return acc + (price * quantity);
     },
     0
   );
-
-console.log(totalCartPrice);
 
   // Disable scrolling when the component is active
   useEffect(() => {
@@ -95,7 +92,7 @@ console.log(totalCartPrice);
     return match?.name || translations[0]?.name || null;
   };
 
-
+console.log(cartItems);
   return (
     <div>
       {/* Backdrop */}

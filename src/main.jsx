@@ -16,6 +16,9 @@ import store from "./Redux/Store/store.js";
 import SingleProduct from "./Pages/SingleProduct.jsx";
 import NewArrivals from "./Pages/NewArrivals.jsx";
 import TrendingProduct from "./Pages/TrendingProduct.jsx";
+import Cart from "./Pages/Cart..jsx";
+import SingleCategory from "./Pages/SingleCategory.jsx";
+import Error from "./Pages/Error.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -49,12 +52,26 @@ const router = createBrowserRouter([
         path: "/trending-products",
         index: true,
         element: <TrendingProduct />,
-      },
-      
+      },      
       {
         path: "/product/:name",
         index: true,
         element: <SingleProduct />,
+      },
+      {
+        path: "/cart",
+        index: true,
+        element: <Cart />,
+      },
+      {
+        path: "/category/:slug",
+        index: true,
+        element: <SingleCategory />,
+      },
+      {
+        path: "*",
+        index: true,
+        element: <Error />,
       },
     ],
   },

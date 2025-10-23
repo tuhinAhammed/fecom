@@ -10,34 +10,18 @@ import {
   MdOutlineArrowBackIosNew,
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
-// import SecondaryButton from "../../Layout/Button/SecondaryButton";
-// import PrimaryProductCard from "../ProductCard/PrimaryProductCard";
 import CategoryTitle from "../../Layout/Title/CategoryTitle";
 import MinTitle from "../../Layout/Title/MinTitle";
-// import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import ViewAllButton from "../../Layout/Button/ViewAllButton";
 import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
 const TrendingProductSection = ({ productData, loading }) => {
-  console.log('Product Data:', productData);
   const navigate = useNavigate()
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  // const productData = useSelector((state) =>
-  //     state.latestAndTopRatedProduct?.topRatedProducts || []
-  // )
-  // console.log(productData);
-
   const handleGoPage = () => {
     navigate("/trending-products");
   };
-
-  // Page Translation
-  // const selectedLanguage = useSelector((state) => state.language.selectedLanguage?.lang_code);
-  // const topRatedProductTranslations = useSelector(
-  //   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
-  // );
 
   const sectionTitleText = "Trending Products"
   return (
@@ -47,7 +31,7 @@ const TrendingProductSection = ({ productData, loading }) => {
           <Container>
             <div
               className="rounded-md"
-              
+
             >
               {/* Section Title with Custom Navigation Buttons */}
               <div className="pb-[20px] sm:pb-sectionSm lg:pb-sectionSm flex items-center justify-between relative">

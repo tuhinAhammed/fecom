@@ -82,8 +82,13 @@ const ContactForm = () => {
 
                                 <ContactInput type="text" name="name" placeholder="Your Name*" className="" onInputChange={handleInputChange} value={formData.name} />
                             </div>
-                            <ContactInput type="text" name="email" placeholder="Your Email*" className="" onInputChange={handleInputChange} value={formData.email} />
-                            <ContactInput type="number" name="phone" placeholder="Your Number*" className="" onInputChange={handleInputChange} value={formData.phone} />
+                            <div className="">
+                                <ContactInput type="text" name="email" placeholder="Your Email*" className="" onInputChange={handleInputChange} value={formData.email} />
+                            </div>
+                            <div className="">
+                                <ContactInput type="text" name="phone" placeholder="Your Number*" className="" onInputChange={handleInputChange} value={formData.phone} />
+
+                            </div>
                         </div>
                         <ContactTextarea onInputChange={handleInputChange} name="message" value={formData.message} />
                         <LoadingButton loadingTime="2000" icon={<IoIosSend />} text="Send Message" className="mt-8" onClick={handleSubmit} />

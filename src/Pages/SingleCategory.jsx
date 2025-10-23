@@ -14,7 +14,7 @@ import LoadingButton from "../Layout/Button/LoadingButton";
 import SecondaryProductCard from "../Layout/ProductCard/SecondaryProductCard";
 import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import PriceRangeFilter from "../Components/Shop/PriceRangeFilter/PriceRangeFilter";
-import { FaChevronDown, FaChevronRight, FaFilter } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaCircleNotch, FaFilter } from "react-icons/fa";
 import { SlArrowDown, SlArrowRight } from "react-icons/sl";
 import { useSelector } from "react-redux";
 // import { shopPageApi } from "../Api/Api";
@@ -24,12 +24,13 @@ import { useLocation } from "react-router-dom";
 // import ScrollToTop from "../Utils/ScrollToTop";
 import { GrPowerReset } from "react-icons/gr";
 import { allProductApi, categoryListApi, currency_symbol } from "../Api";
-const Shop = () => {
+import { LuLoaderCircle } from "react-icons/lu";
+const SingleCategory = () => {
   const [shopData, setShopData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [layoutView, setLayoutView] = useState("grid");
   const [resetPrices, setResetPrices] = useState(false); // New state for price reset
-  const [visibleItems, setVisibleItems] = useState(9);
+  const [visibleItems, setVisibleItems] = useState(12);
   const [loading, setLoading] = useState(true);
   const [minAmount, setMinAmount] = useState(null);
   const [maxAmount, setMaxAmount] = useState(null);
@@ -42,6 +43,7 @@ const Shop = () => {
   // commonData Fetching
   const currency = useSelector((state) => state.currency?.selectedCurrency);
   const location = useLocation();
+  const categorySlugName = (location.state.categorySlug);
   // Initialize sortOption with location.state.sortBy if available
   const [sortOption, setSortOption] = useState(
     () => location.state?.sortBy || ""
@@ -96,21 +98,14 @@ const Shop = () => {
     setVisibleItems((prev) => prev + 9);
   };
 
-  // Category Based Product filtering
-  const [showAllCategories, setShowAllCategories] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-
-  // *** ADDED: Compute top-level category names and check if all are selected ***
-  const allCategoryNames = categories?.map((category) => category.category_name) || [];
-  const isAllSelected = selectedCategories?.length === 0 ||
-    (allCategoryNames?.length > 0 && allCategoryNames.every((name) => selectedCategories.includes(name)));
-  console.log(allCategoryNames);
   // Handle filtering products based on selected categories, price range, and brands
   const filteredProducts = shopData
     ?.filter((product) => {
-      const matchesCategory =
-        selectedCategories?.length === 0 ||
-        selectedCategories.includes(product.category_id);
+        console.log(product);
+        const matchesCategory = Array.isArray(categorySlugName)
+        ? categorySlugName.includes(product.category_id)
+        : product.category_id === categorySlugName; 
+
       const matchesPrice =
         (minAmount === null || product.offer_price >= minAmount) &&
         (maxAmount === null || product.offer_price <= maxAmount);
@@ -137,14 +132,7 @@ const Shop = () => {
     });
 
   // Handling the category selection and deselection
-  const handleCategoryToggle = (categoryName) => {
-    if (selectedCategories.includes(categoryName)) {
-      setSelectedCategories(selectedCategories.filter(name => name !== categoryName));
-    } else {
-      setSelectedCategories([...selectedCategories, categoryName]);
-    }
-  };
-console.log(filteredProducts);
+
   // Price Range Based Filtering
   const handlePriceChange = (min, max) => {
     // Ensure values are numbers
@@ -158,7 +146,6 @@ console.log(filteredProducts);
   const resetFiltering = () => {
     setMinAmount(null);
     setMaxAmount(null);
-    setSelectedCategories([]);
     setSortOption("");
     setVisibleItems(9);
     setResetPrices(true); // Trigger price range reset
@@ -180,8 +167,6 @@ console.log(filteredProducts);
     return (
       minAmount !== null ||
       maxAmount !== null ||
-      selectedBrands?.length > 0 ||
-      selectedCategories?.length > 0 ||
       sortOption !== ""
     );
   };
@@ -220,129 +205,26 @@ console.log(filteredProducts);
   console.log(categories);
   console.log(filteredProducts);
   return (
-    <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionXl bg-secondary ">
+    <div className="pb-sectionSm md:pb-sectionMd lg:pb-sectionLg xl:pb-sectionLg  bg-secondary pt-4">
       <Container>
-        <Breadcrumb title={getTranslation("Shop", "Shop")} />
-        <div className="lg:grid lg:grid-cols-12 items-start justify-center pt-sectionSm lg:pt-sectionSm ">
+        {/* <Breadcrumb title={getTranslation("Shop", "Shop")} /> */}
+        <div className=" items-start justify-center ">
           {filteredProducts?.length > 0 && (
             <div
               onClick={toggleVisibility}
-              className="fixed top-1/2 left-0 p-3 bg-secondary rounded-sm text-theme z-[20] block lg:hidden"
+              className="hidden top-1/2 left-0 p-3 bg-secondary rounded-sm text-theme z-[20] "
               style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}
             >
               <FaFilter />
             </div>
           )}
-          <div className={`col-span-3 bg-secondary  hidden lg:block relative h-full ${filteredProducts?.length < visibleItems && ""
-              } `}
-          >
-            <div
-              className="py-[20px] sm:py-sectionSm lg:py-sectionSm px-2 sm:px-4 md:px-6 lg:px-6 bg-secondary rounded-md md:sticky elative top-20  "
-              style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}
-            >
-              {/* Categories */}
-              <div className="border-b-[1px] border-borderColor ">
-                <ExtraMidTitle 
-                  text={getTranslation("Categories", "Categories")}
-                  className="!font-medium !text-[20px] !opacity-[0.9]"
-                />
-                <div className="grid grid-cols-1 gap-4 my-5 ">
-                  {/* *** ADDED: "All Categories" checkbox */}
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={isAllSelected}
-                      onChange={() => setSelectedCategories([])}
-                      className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                    />
-                    <span
-                      className="cursor-pointer opacity-80 font-medium text-[10px] sm:text-xs md:text-sm"
-                      onClick={() => setSelectedCategories([])}
-                    >
-                      {getTranslation("All_Categories", "All Categories")}
-                    </span>
-                  </div>
-                  {(showAllCategories
-                    ? categories
-                    : categories.slice(0, 8)
-                  ).map((category, index) => (
-                    <div key={index} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(category.category_name)}
-                        onChange={() => handleCategoryToggle(category.category_name)}
-                        className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                      />
-                      <span
-                        className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm hover:text-theme duration-200"
-                        onClick={() => handleCategoryToggle(category.category_name)}
-                      >
-                        {getTranslatedCategoryName(category, category.category_name)}
-                      </span>
-                    </div>
-                  ))}
-                  {!showAllCategories && categories?.length > 4 && (
-                    <button
-                      onClick={() => setShowAllCategories(true)}
-                      className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm mt-2"
-                    >
-                      {getTranslation("See_More", "See More")}
-                    </button>
-                  )}
-                </div>
-              </div>
 
-              {/* Price Range */}
-              <div className="pt-3 ">
-                <ExtraMidTitle
-                  text={getTranslation("Price_Range", "Price Range")}
-                  className="!font-medium !text-[20px] !opacity-[0.9]"
-                />
-                <div className="hidden md:block">
-                  <PriceRangeFilter
-                    reset={resetPrices} // Pass the reset state
-                    currencyData={currency_symbol}
-                    onPriceChange={handlePriceChange}
-                  />
-                </div>
+          <div className=" md:ml-8 w-full relative mt-12 md:mt-0">
+          <div className="text-center md:hidden">
+                <LargeTitle className="font-medium" text={categorySlugName}/>
               </div>
-
-              {/* Brands - Commented out since no brand data */}
-              {/* <div className="pt-6">
-                <ExtraMidTitle
-                  text={getTranslation("Brands", "Brands")}
-                  className="!font-medium !text-[20px]"
-                />
-                <div className="py-3 grid grid-cols-1 gap-2 border-borderColor">
-                  {brandsData.map((item, index) => {
-                    const content = getBrandsTranslatedContent(item);
-                    return (
-                      <div
-                        key={index}
-                        className="flex gap-2 items-center font-medium cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(item.slug)}
-                          onClick={() => handleBrandToggle(item.slug)}
-                          className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                        />
-                        <span
-                          className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm"
-                          onClick={() => handleBrandToggle(item.slug)}
-                        >
-                          {content.name}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div> */}
-            </div>
-          </div>
-          <div className="col-span-9 md:ml-8 relative ">
             {/* Select and Grid Type */}
-            <div className="flex items-center justify-between gap-4 sm:gap-8 md:justify-between  z-[6] ">
+            <div className="grid grid-cols-2 md:grid-cols-3 w-full py-2 items-center  gap-4 sm:gap-8 md:justify-between  z-[6] md:sticky md:top-[85px] bg-secondary">
               <div className="flex gap-2">
                 <select
                   className="pt-[8px] pr-[20px] pb-[8px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-borderColor focus:outline-none focus:ring-0"
@@ -380,7 +262,10 @@ console.log(filteredProducts);
                   </div>
                 )}
               </div>
-              <div className="flex gap-2 text-xl ">
+              <div className="text-center hidden md:block">
+                <MidTitle className="font-medium" text={categorySlugName}/>
+              </div>
+              <div className="flex justify-end gap-2 text-xl ">
                 <p
                   onClick={() => handleProductLayout("grid")}
                   className={`p-2 border-[1px] border-theme rounded-md hover:bg-theme hover:text-secondary cursor-pointer duration-200 ${layoutView === "grid"
@@ -403,7 +288,7 @@ console.log(filteredProducts);
             </div>
             {/* All Products */}
             {loading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 pt-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-5 pt-5">
                 {[...Array(visibleItems)].map((_, index) => (
                   <PrimaryProductCard key={index} loading={loading} />
                 ))}
@@ -429,7 +314,7 @@ console.log(filteredProducts);
             ) : (
               <div className="">
                 {layoutView === "grid" ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 pt-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-5 pt-5">
                     {filteredProducts
                       ?.slice(0, visibleItems)
                       .map((item, index) => {
@@ -455,7 +340,7 @@ console.log(filteredProducts);
                       })}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-5 pt-5">
+                  <div className="grid grid-cols-2 gap-5 pt-5">
                     {filteredProducts
                       ?.slice(0, visibleItems)
                       ?.map((item, index) => {
@@ -491,6 +376,7 @@ console.log(filteredProducts);
                   loadingTime="1000"
                   text={getTranslation("Load_More", "Load More")}
                   onClick={handleLoadMore}
+                  icon={<LuLoaderCircle />}
                 />
               </div>
             )}
@@ -531,57 +417,6 @@ console.log(filteredProducts);
                 className="py-[20px] sm:py-sectionSm lg:py-sectionSm px-2 sm:px-4 md:px-6 lg:px-6 bg-secondary rounded-md relative "
                 style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}
               >
-                {/* Categories */}
-                <div className="border-b-[1px] border-borderColor">
-                  <ExtraMidTitle
-                    text={getTranslation("Categories", "Categories")}
-                    className="!font-medium !text-[20px] !opacity-[0.9]"
-                  />
-                  <div className="grid grid-cols-1 gap-4 my-5 ">
-                    {/* *** ADDED: "All Categories" checkbox */}
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={isAllSelected}
-                        onChange={() => setSelectedCategories([])}
-                        className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                      />
-                      <span
-                        className="cursor-pointer opacity-80 font-medium text-[10px] sm:text-xs md:text-sm"
-                        onClick={() => setSelectedCategories([])}
-                      >
-                        {getTranslation("All_Categories", "All Categories")}
-                      </span>
-                    </div>
-                    {(showAllCategories
-                      ? categories
-                      : categories.slice(0, 6)
-                    ).map((category, index) => (
-                      <div key={index} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedCategories.includes(category.category_name)}
-                          onChange={() => handleCategoryToggle(category.category_name)}
-                          className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                        />
-                        <span
-                          className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm hover:text-theme duration-200"
-                          onClick={() => handleCategoryToggle(category.category_name)}
-                        >
-                          {getTranslatedCategoryName(category, category.category_name)}
-                        </span>
-                      </div>
-                    ))}
-                    {!showAllCategories && categories?.length > 6 && (
-                      <button
-                        onClick={() => setShowAllCategories(true)}
-                        className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm mt-2"
-                      >
-                        {getTranslation("See_More", "See More")}
-                      </button>
-                    )}
-                  </div>
-                </div>
 
                 {/* Price Range */}
                 <div className="pt-3 ">
@@ -592,47 +427,15 @@ console.log(filteredProducts);
 
                   <div className="">
                     {typeof window !== "undefined" &&
-                      window.innerWidth < 992 && (
+                      window.innerWidth > 992 && (
                         <PriceRangeFilter
                           reset={resetPrices} // Pass the reset state
-                          currencyData="&"
+                          currencyData=""
                           onPriceChange={handlePriceChange}
                         />
                       )}
                   </div>
                 </div>
-
-                {/* Brands - Commented out since no brand data */}
-                {/* <div className="pt-6">
-                  <ExtraMidTitle
-                    text={getTranslation("Brands", "Brands")}
-                    className="!font-medium !text-[20px]"
-                  />
-                  <div className="py-3 grid grid-cols-1 gap-2 border-borderColor">
-                    {brandsData.map((item, index) => {
-                      const content = getBrandsTranslatedContent(item);
-                      return (
-                        <div
-                          key={index}
-                          className="flex gap-2 items-center font-medium cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedBrands.includes(item.slug)}
-                            onClick={() => handleBrandToggle(item.slug)}
-                            className="w-[14px] h-[14px] border-[1px] border-tertiary rounded-[3px] focus:outline-none focus:!ring-0 focus:ring-blue-300 cursor-pointer border-opacity-[0.4]"
-                          />
-                          <span
-                            className="cursor-pointer text-primary opacity-[0.9] font-medium text-[10px] sm:text-xs md:text-sm"
-                            onClick={() => handleBrandToggle(item.slug)}
-                          >
-                            {content.name}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -642,4 +445,4 @@ console.log(filteredProducts);
   );
 };
 
-export default Shop;
+export default SingleCategory;

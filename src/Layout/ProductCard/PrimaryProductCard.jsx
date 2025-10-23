@@ -277,7 +277,7 @@ const PrimaryProductCard = ({
             <div className="">
               {/* Discount Badge */}
               {regularPrice < finalPrice && (
-                <div className="absolute  top-1 sm:top-2 md:top-3 lg:top-4 left-1 sm:left-2 md:left-3 lg:left-4 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
+                <div className="absolute  top-1 sm:top-2 md:top-3 lg:top-3 left-1 sm:left-2 md:left-3 lg:left-3 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
                   <p className="text-[12px] font-normal">
                     {Math.round(((regularPrice - finalPrice) / regularPrice) * 100)}% OFF
                   </p>
@@ -285,30 +285,26 @@ const PrimaryProductCard = ({
               )}
 
               {/* Wishlist and Compare Icons */}
-              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/outer:opacity-100 transition-opacity duration-300 z-10 ">
+              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-100 group-hover/outer:opacity-100 transition-opacity duration-300 z-10 ">
                 {/* Wishlist Button */}
                 <div className="relative w-full">
                   <div
                     onClick={handleAddToWishlist}
-                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
+                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-full cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
                   >
                     <FaRegHeart className="text-base" />
                     {/* Tooltip on icon hover */}
 
-                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3  py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
-                      Wishlist
-                    </span> */}
                   </div>
                 </div>
-                <div className="relative ">
+                {/* <div className="relative ">
                   <div
                     onClick={() => handleAddToCompare(slug)}
                     className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
                   >
                     <BiGitCompare className="text-base" />
-                    {/* Tooltip on icon hover */}
 
-                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block">
+                    <span>
                       {(() => {
                         var fullText = "Compare";
                         var maxLength = 12;
@@ -316,18 +312,16 @@ const PrimaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span> */}
+                    </span>
                   </div>
-                </div>
-                <div className="relative w-full">
+                </div> */}
+                {/* <div className="relative w-full">
                   <div
                     onClick={handleViewModal}
                     className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner w-full"
                   >
                     <FaEye className="text-base" />
-                    {/* Tooltip on icon hover */}
-
-                    {/* <span className="absolute top-1/2 right-full -translate-y-1/2 mr-2 bg-primary text-secondary text-xs px-3 py-2 py-[5px] rounded-md  transition-opacity duration-300  hidden group-hover/inner:block block">
+                    <span>
                       {(() => {
                         const fullText = "Quick View";
                         const maxLength = 12;
@@ -335,9 +329,9 @@ const PrimaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span> */}
+                    </span>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Image container with dynamic aspect ratio */}
@@ -364,24 +358,6 @@ const PrimaryProductCard = ({
                 <div className="absolute bottom-0 w-full z-[10]" >
                   {stock === "yes" ? (
                     <div className="" >
-                      {isVariant === true ? (
-                        <SelectButton
-                          onClick={handleViewModal}
-                          className="w-full m-auto hover:!bg-theme hover:!border-theme active:bg-buttonHover "
-                          // link={"/"}
-                          text={(() => {
-                            const fullText = "Select";
-                            const maxLength = 12;
-                            return fullText.length > maxLength
-                              ? fullText.slice(0, maxLength - 1) + "…"
-                              : fullText;
-                          })()}
-                          // slug={slug}
-                          icon={
-                            <LiaCartArrowDownSolid className="font-bold text-[17px]" />
-                          }
-                        />
-                      ) : (
                         <div className="grid-cols-1 gap-1 grid transform transition-all duration-300 ease-out translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ">
                           <BuyNowButton
                             onClick={handleAddToCart}
@@ -418,7 +394,7 @@ const PrimaryProductCard = ({
                           // slug={slug}
                           />
                         </div>
-                      )}
+
                     </div>
                   ) : (
                     <div className="">

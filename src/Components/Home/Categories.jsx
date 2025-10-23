@@ -17,16 +17,12 @@ const Categories = () => {
 
   const activeCategories =
     categoriesData?.filter((category) => category.status === "active") || [];
-
+console.log(activeCategories);
   const handleGoCategory = (categorySlug) => {
     try {
-      if (categorySlug === "/categories") {
-        navigate(`/categories`);
-      } else {
-        navigate(`/categories/${categorySlug}`, {
+        navigate(`/category/${categorySlug}`, {
           state: { categorySlug },
         });
-      }
     } catch (error) {
       console.error("Error fetching category:", error);
     }
@@ -60,7 +56,7 @@ const Categories = () => {
                 return (
                   <SwiperSlide key={item.id} className="relative">
                     <div
-                      onClick={() => handleGoCategory(item.slug)}
+                      onClick={() => handleGoCategory(item.category_name)}
                       className="flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <img

@@ -20,15 +20,9 @@ import { useEffect } from "react";
 import ViewAllButton from "../../Layout/Button/ViewAllButton";
 import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
 const AllProduct = ({ productData, loading }) => {
-  console.log('Product Data:', productData);
   const navigate = useNavigate()
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  // const productData = useSelector((state) =>
-  //     state.latestAndTopRatedProduct?.topRatedProducts || []
-  // )
-  // console.log(productData);
-
   const handleGoPage = () => {
     navigate("/shop");
   };

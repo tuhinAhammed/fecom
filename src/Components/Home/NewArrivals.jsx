@@ -20,25 +20,12 @@ import { useEffect } from "react";
 import ViewAllButton from "../../Layout/Button/ViewAllButton";
 import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
 const NewArrivals = ({ productData, loading }) => {
-  console.log('Product Data:', productData);
   const navigate = useNavigate()
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  // const productData = useSelector((state) =>
-  //     state.latestAndTopRatedProduct?.topRatedProducts || []
-  // )
-  // console.log(productData);
-
   const handleGoPage = () => {
     navigate("/new-arrivals");
   };
-
-  // Page Translation
-  // const selectedLanguage = useSelector((state) => state.language.selectedLanguage?.lang_code);
-  // const topRatedProductTranslations = useSelector(
-  //   (state) => state.homeBlogs?.homeBlogs?.page_translations?.Top_Rated_Product
-  // );
-
   const sectionTitleText = "New Arrivals"
   return (
     <>
