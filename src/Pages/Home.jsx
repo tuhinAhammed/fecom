@@ -14,31 +14,12 @@ import AllProduct from '../Components/Home/AllProduct.jsx'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const landingData = useSelector((state) => state?.landingPageData?.data)
-
+  
   // Manage loading and error locally
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // Only fetch if data doesn't exist
-      if (!landingData) {
-        setLoading(true)
-        setError(null)
-        try {
-          await dispatch(fetchLandingPageData()).unwrap()
-        } catch (err) {
-          setError(err.message || 'Failed to fetch data')
-        } finally {
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchData()
-  }, [dispatch, landingData])
+  const landingData = useSelector((state) => state?.landingPageData?.data)
+console.log(landingData);
 
 
 

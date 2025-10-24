@@ -61,22 +61,14 @@ const NewArrivals = () => {
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
-
+  const landingData = useSelector((state) => state?.landingPageData?.data)
   // fetch all Products
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(langingPageApi, {});
-        const categoryResponse = await axios.get(categoryListApi,
-          {
-            headers: {
-              Authorization: `Bearer ${loginToken}`,
-            },
-          }
-        );
-        setShopData(productResponse?.data?.products?.new) || [];
-        setCategories(categoryResponse?.data?.data);
+        setShopData(landingData?.products?.all) || [];
+        setCategories(landingData?.categories) || [];
       } catch (error) {
         console.log(error);
       } finally {
@@ -84,7 +76,7 @@ const NewArrivals = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [landingData]);
 
   const handleProductLayout = (layout) => {
     setLayoutView(layout);
@@ -258,8 +250,8 @@ const NewArrivals = () => {
                   </div>
                   {(showAllCategories
                     ? categories
-                    : categories.slice(0, 8)
-                  ).map((category, index) => (
+                    : categories?.slice(0, 8)
+                  )?.map((category, index) => (
                     <div key={index} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -549,8 +541,8 @@ const NewArrivals = () => {
                     </div>
                     {(showAllCategories
                       ? categories
-                      : categories.slice(0, 6)
-                    ).map((category, index) => (
+                      : categories?.slice(0, 6)
+                    )?.map((category, index) => (
                       <div key={index} className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"

@@ -62,23 +62,14 @@ const Shop = () => {
     setSortOption(e.target.value);
   };
 
+  const landingData = useSelector((state) => state?.landingPageData?.data)
   // fetch all Products
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(allProductApi, {});
-        const categoryResponse = await axios.get(categoryListApi,
-          {
-            headers: {
-              Authorization: `Bearer ${loginToken}`,
-            },
-          }
-        );
-        console.log(categoryResponse);
-        console.log(productResponse);
-        setShopData(productResponse?.data?.data) || [];
-        setCategories(categoryResponse?.data?.data);
+        setShopData(landingData?.products?.all) || [];
+        setCategories(landingData?.categories);
       } catch (error) {
         console.log(error);
       } finally {
@@ -86,7 +77,7 @@ const Shop = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [landingData]);
 
   const handleProductLayout = (layout) => {
     setLayoutView(layout);
@@ -144,7 +135,7 @@ const Shop = () => {
       setSelectedCategories([...selectedCategories, categoryName]);
     }
   };
-console.log(filteredProducts);
+  console.log(filteredProducts);
   // Price Range Based Filtering
   const handlePriceChange = (min, max) => {
     // Ensure values are numbers
@@ -234,7 +225,7 @@ console.log(filteredProducts);
             </div>
           )}
           <div className={`col-span-3 bg-secondary  hidden lg:block relative h-full ${filteredProducts?.length < visibleItems && ""
-              } `}
+            } `}
           >
             <div
               className="py-[20px] sm:py-sectionSm lg:py-sectionSm px-2 sm:px-4 md:px-6 lg:px-6 bg-secondary rounded-md md:sticky elative top-20  "
@@ -242,7 +233,7 @@ console.log(filteredProducts);
             >
               {/* Categories */}
               <div className="border-b-[1px] border-borderColor ">
-                <ExtraMidTitle 
+                <ExtraMidTitle
                   text={getTranslation("Categories", "Categories")}
                   className="!font-medium !text-[20px] !opacity-[0.9]"
                 />
@@ -264,8 +255,8 @@ console.log(filteredProducts);
                   </div>
                   {(showAllCategories
                     ? categories
-                    : categories.slice(0, 8)
-                  ).map((category, index) => (
+                    : categories?.slice(0, 8)
+                  )?.map((category, index) => (
                     <div key={index} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -384,8 +375,8 @@ console.log(filteredProducts);
                 <p
                   onClick={() => handleProductLayout("grid")}
                   className={`p-2 border-[1px] border-theme rounded-md hover:bg-theme hover:text-secondary cursor-pointer duration-200 ${layoutView === "grid"
-                      ? "bg-theme text-secondary"
-                      : "bg-transparent text-theme"
+                    ? "bg-theme text-secondary"
+                    : "bg-transparent text-theme"
                     }`}
                 >
                   <PiGridNine />
@@ -393,8 +384,8 @@ console.log(filteredProducts);
                 <p
                   onClick={() => handleProductLayout("list")}
                   className={`p-2 border-[1px] border-theme rounded-md hover:bg-theme hover:text-secondary cursor-pointer duration-200 ${layoutView === "list"
-                      ? "bg-theme text-secondary"
-                      : "bg-transparent text-theme"
+                    ? "bg-theme text-secondary"
+                    : "bg-transparent text-theme"
                     }`}
                 >
                   <IoMenu />
@@ -461,21 +452,21 @@ console.log(filteredProducts);
                       ?.map((item, index) => {
                         return (
                           <SecondaryProductCard
-                          thumbnail={item.photos?.[0] ?
-                            `${item.photos[0].file_path}/${item.photos[0].file_name}` :
-                            item.thumbnail
-                          }
-                          category={item.category_id}
-                          name={item.product_name}
-                          finalPrice={item.offer_price}
-                          regularPrice={item.regular_price}
-                          slug={item.slug}
-                          ratting={item.rating}
-                          loading={loading}
-                          onQuickView={() => handleOpenModal(item)}
-                          productId={item?.id}
-                          stock={item.stock}
-                          variants={item?.variants}
+                            thumbnail={item.photos?.[0] ?
+                              `${item.photos[0].file_path}/${item.photos[0].file_name}` :
+                              item.thumbnail
+                            }
+                            category={item.category_id}
+                            name={item.product_name}
+                            finalPrice={item.offer_price}
+                            regularPrice={item.regular_price}
+                            slug={item.slug}
+                            ratting={item.rating}
+                            loading={loading}
+                            onQuickView={() => handleOpenModal(item)}
+                            productId={item?.id}
+                            stock={item.stock}
+                            variants={item?.variants}
                           />
                         );
                       })}
@@ -555,8 +546,8 @@ console.log(filteredProducts);
                     </div>
                     {(showAllCategories
                       ? categories
-                      : categories.slice(0, 6)
-                    ).map((category, index) => (
+                      : categories?.slice(0, 6)
+                    )?.map((category, index) => (
                       <div key={index} className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"

@@ -26,6 +26,7 @@ import { GrPowerReset } from "react-icons/gr";
 import { allProductApi, categoryListApi, currency_symbol } from "../Api";
 import { LuLoaderCircle } from "react-icons/lu";
 const SingleCategory = () => {
+  const landingData = useSelector((state) => state?.landingPageData?.data)
   const [shopData, setShopData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [layoutView, setLayoutView] = useState("grid");
@@ -69,18 +70,8 @@ const SingleCategory = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(allProductApi, {});
-        const categoryResponse = await axios.get(categoryListApi,
-          {
-            headers: {
-              Authorization: `Bearer ${loginToken}`,
-            },
-          }
-        );
-        console.log(categoryResponse);
-        console.log(productResponse);
-        setShopData(productResponse?.data?.data) || [];
-        setCategories(categoryResponse?.data?.data);
+        setShopData(landingData?.products?.all) || [];
+        setCategories(landingData?.categories) || [];
       } catch (error) {
         console.log(error);
       } finally {
@@ -88,7 +79,7 @@ const SingleCategory = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [landingData]);
 
   const handleProductLayout = (layout) => {
     setLayoutView(layout);
@@ -208,7 +199,7 @@ const SingleCategory = () => {
     <div className="pb-sectionSm md:pb-sectionMd lg:pb-sectionLg xl:pb-sectionLg  bg-secondary pt-4">
       <Container>
         {/* <Breadcrumb title={getTranslation("Shop", "Shop")} /> */}
-        <div className=" items-start justify-center ">
+        <div className="items-start justify-center ">
           {filteredProducts?.length > 0 && (
             <div
               onClick={toggleVisibility}
@@ -224,7 +215,7 @@ const SingleCategory = () => {
                 <LargeTitle className="font-medium" text={categorySlugName}/>
               </div>
             {/* Select and Grid Type */}
-            <div className="grid grid-cols-2 md:grid-cols-3 w-full py-2 items-center  gap-4 sm:gap-8 md:justify-between  z-[6] md:sticky md:top-[85px] bg-secondary">
+            <div className="grid grid-cols-2 md:grid-cols-3 w-full py-2 items-center  gap-4 sm:gap-8 md:justify-between  z-[6]  md:sticky md:top-[85px] bg-secondary">
               <div className="flex gap-2">
                 <select
                   className="pt-[8px] pr-[20px] pb-[8px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-borderColor focus:outline-none focus:ring-0"

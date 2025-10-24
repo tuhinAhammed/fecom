@@ -122,7 +122,7 @@ console.log(cartItems);
                   key={index}
                   index={index}
                   productId={item.id}
-                  productImage={`${item.photos[0].file_path}/${item.photos[0].file_name}`}
+                  productImage={`${item?.photos[0].file_path}/${item?.photos[0].file_name}`}
                   productName={item.product_name}
                   productVarient={item.variant} // ✅ pass selected variant
                   variants={item.variants}

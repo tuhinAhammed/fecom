@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import MinTitle from "../Title/MinTitle";
 import PrimaryButton from "../Button/PrimaryButton";
-import { FaExchangeAlt, FaEye, FaRegHeart, FaStar } from "react-icons/fa";
+import { FaExchangeAlt, FaEye, FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { BiCartDownload, BiGitCompare } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 // import Ratting from "./Ratting";
@@ -24,6 +24,8 @@ import { LiaCartArrowDownSolid, LiaCartPlusSolid } from "react-icons/lia";
 import { toastr_position } from "../../Api";
 import MidTitle from "../Title/MidTitle";
 import { CgPentagonTopRight } from "react-icons/cg";
+import { addWishlistItem } from "../../Redux/Slice/wishlistSlice";
+import { IoMdHeart } from "react-icons/io";
 // import { addCompareItem } from "../../Redux/Slices/compareSlice";
 const DOMAIN_NAME = import.meta.env.VITE_API_DOMAIN_NAME;
 
@@ -56,11 +58,13 @@ const PrimaryProductCard = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems); // Access cartItems from Redux store
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems); // Access cartItems from Redux store
   // const compareItems = useSelector((state) => state.compare.compareItems);
 
   const loginToken = useSelector((state) => state.userData?.data?.token);
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isInWishlist = wishlistItems.some(item => item.productId === productId);
   // Product Details Page
   const handleProductFetch = async () => {
     const productSlug = name
@@ -112,58 +116,26 @@ const PrimaryProductCard = ({
   };
 
   // Add To WishList
-  const handleAddToWishlist = async () => {
-    if (!loginToken || loginToken === "") {
-      navigate("/signin");
+
+  const handleAddToWishlist = () => {
+    const alreadyExists = wishlistItems.some(
+      (item) =>
+        item.productId === productId 
+    );
+  
+    if (alreadyExists) {
+      toast.warning("Already exists in wishlist", { autoClose: 1500 });
       return;
     }
-
-    const loadingToastId = toast.loading("Adding to wishlist...", {
-      position: `${toastr_position}`,
-    }); // Show immediate feedback inside the existing ToastContainer
-
-    setWishlistLoading(true); // Start loading state
-
-    try {
-      const response = await axios.post(
-        addToWishlistApi,
-        { slug },
-        {
-          headers: {
-            Authorization: `Bearer ${loginToken}`,
-          },
-        }
-      );
-
-      Promise.resolve().then(() => {
-        if (response.data?.status === "success") {
-          toast.update(loadingToastId, {
-            render: response.data?.message,
-            type: "success",
-            isLoading: false,
-            autoClose: 1500,
-          });
-        } else {
-          toast.update(loadingToastId, {
-            render: response.data?.details,
-            type: "warning",
-            isLoading: false,
-            autoClose: 1500,
-          });
-        }
-      });
-    } catch (error) {
-      Promise.resolve().then(() => {
-        toast.update(loadingToastId, {
-          render: error.response?.data?.details || "An error occurred",
-          type: "warning",
-          isLoading: false,
-          autoClose: 1500,
-        });
-      });
-    } finally {
-      setWishlistLoading(false); // Stop loading
-    }
+  
+    dispatch(
+      addWishlistItem({
+        productId: productId,
+        variant: null,
+      })
+    );
+  
+    toast.success("Added to wishlist ❤️", { autoClose: 1500 });
   };
 
   // Add to compare
@@ -290,9 +262,14 @@ const PrimaryProductCard = ({
                 <div className="relative w-full">
                   <div
                     onClick={handleAddToWishlist}
-                    className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-full cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
+                    className={`flex items-center justify-center p-[6px]  bg-opacity-[0.8] bg-secondary text-primary shadow-md rounded-full cursor-pointer ${isInWishlist ? "hover:bg-secondary" : "hover:bg-theme"}  hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner`}
                   >
+                    {
+                      isInWishlist ? 
+                    <FaHeart className="text-base text-red-500" />
+                    :
                     <FaRegHeart className="text-base" />
+                  }
                     {/* Tooltip on icon hover */}
 
                   </div>

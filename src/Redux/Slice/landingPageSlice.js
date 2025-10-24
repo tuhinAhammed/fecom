@@ -8,6 +8,7 @@ export const fetchLandingPageData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(langingPageApi)
+      console.log(response);
       return response.data
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch data')
