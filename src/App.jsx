@@ -21,8 +21,6 @@ function App() {
   const dispatch = useDispatch()
   const landingData = useSelector((state) => state?.landingPageData?.data)
 
-
-console.log(landingData);
   useEffect(() => {
     const fetchData = async () => {
       // Only fetch if data doesn't exist

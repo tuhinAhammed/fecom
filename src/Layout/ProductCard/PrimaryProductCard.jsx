@@ -124,7 +124,7 @@ const PrimaryProductCard = ({
     );
   
     if (alreadyExists) {
-      toast.warning("Already exists in wishlist", { autoClose: 1500 });
+      toast.warning("Already exists in wishlist", {position: `${toastr_position}`, autoClose: 1500 });
       return;
     }
   
@@ -135,7 +135,7 @@ const PrimaryProductCard = ({
       })
     );
   
-    toast.success("Added to wishlist ❤️", { autoClose: 1500 });
+    toast.success("Added to wishlist ❤️", {position: `${toastr_position}`, autoClose: 1500 });
   };
 
   // Add to compare

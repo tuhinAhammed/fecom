@@ -21,7 +21,6 @@ import MinCartCard from "./MinCartCard";
 
 const CartTotal = ({ isVisibleValue, onClose }) => {
   const [cartItems, setCartItems] = useState([])
-  console.log(cartItems);
   const dispatch = useDispatch();
 
   // Access cart items from Redux store
@@ -36,13 +35,11 @@ const CartTotal = ({ isVisibleValue, onClose }) => {
         const responses = await Promise.all(
           cartData.map(item => axios.get(`${singleProductApi}${item.productId}`))
         );
-
         const mergedProducts = responses.map((res, i) => ({
           ...res.data.product, // full product info
           quantity: cartData[i].quantity,
           variant: cartData[i].variant || null,
         }));
-
         setCartItems(mergedProducts);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -92,7 +89,6 @@ const CartTotal = ({ isVisibleValue, onClose }) => {
     return match?.name || translations[0]?.name || null;
   };
 
-console.log(cartItems);
   return (
     <div>
       {/* Backdrop */}
@@ -115,14 +111,17 @@ console.log(cartItems);
       >
         <div className="grid grid-cols-1 items-center  gap-2 sm:gap-3 md:gap-4   ">
           {cartItems?.length > 0 ? (
-            cartItems.map((item, index) => {
+            cartItems?.map((item, index) => {
               // console.log(item.productImage);
               return (
                 <MinCartCard
                   key={index}
                   index={index}
                   productId={item.id}
-                  productImage={`${item?.photos[0].file_path}/${item?.photos[0].file_name}`}
+                  productImage={
+                    item?.photos?.length > 0
+                      && `${item.photos[0].file_path}/${item.photos[0].file_name}`
+                  }                  
                   productName={item.product_name}
                   productVarient={item.variant} // ✅ pass selected variant
                   variants={item.variants}

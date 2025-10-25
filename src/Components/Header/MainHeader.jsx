@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Container from '../../Layout/Container'
 import sitelogo from "../../assets/Header/logo.png"
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import HeaderSearch from '../../Layout/SearchInput/HeaderSearch'
 import { LuInfo, LuShoppingCart } from 'react-icons/lu'
 import { FaRegHeart } from 'react-icons/fa'
@@ -26,7 +26,6 @@ import { RiStore2Line } from 'react-icons/ri'
 import Categories from '../Home/Categories'
 
 // Example components for each drawer
-const WishlistContent = () => <p>Your wishlist items will appear here.</p>
 const MobileMenuContent = () => (
   <div className="p-4">
     <div className="flex flex-col space-y-4">
@@ -56,23 +55,29 @@ const MobileMenuContent = () => (
 
 const MainHeader = () => {
   const [openDrawer, setOpenDrawer] = useState(null)
+  const [cartItemCount, setCartItemCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
   const { token, user } = useSelector((state) => state?.userData)
   const { cartItems } = useSelector((state) => state.cart);
-  const [cartItemCount, setCartItemCount] = useState(0);
-
+  const { wishlistItems } = useSelector((state) => state.wishlist);
+  const navigate = useNavigate()
   // Cart Count Show
   useEffect(() => {
-    if (Array.isArray(cartItems)) {
+    if (Array.isArray(cartItems , wishlistItems)) {
       const selectedItemsCount = cartItems?.length;
+      const selectedWishlistCount = wishlistItems?.length;
       setCartItemCount(selectedItemsCount);
-      console.log(cartItems);
+      setWishlistCount(selectedWishlistCount);
     } else {
       setCartItemCount(0); // Fallback when cartItems is not an array
     }
-  }, [cartItems]);
+  }, [cartItems , wishlistItems]);
 
   const handleClose = () => setOpenDrawer(null)
-
+  // Handle Go Wishlist page
+  const handleGoWishlist = () => {
+    navigate("/wishlist")
+  }
   return (
     <>
       <div className='z-[8] py-0 fixed top-0 left-0 right-0 md:sticky md:top-0 w-full bg-secondary shadow-sm'>
@@ -125,8 +130,13 @@ const MainHeader = () => {
             </div>
             <div className="hidden md:block">
               <div className="flex items-center gap-10">
-                <div className="text-2xl cursor-pointer" onClick={() => setOpenDrawer("wishlist")}>
+              <div onClick={handleGoWishlist} className="relative text-2xl cursor-pointer" >
                   <FaRegHeart />
+                  {wishlistCount > 0 && (
+                    <div className="absolute -top-3 -right-3 bg-theme text-secondary text-[12px] rounded-full w-[21px] h-[21px] flex items-center justify-center">
+                      {wishlistCount}
+                    </div>
+                  )}
                 </div>
                 <div className="relative text-2xl cursor-pointer" onClick={() => setOpenDrawer("cart")}>
                   <LuShoppingCart />
@@ -144,8 +154,13 @@ const MainHeader = () => {
             {/* Mobile Navigation - Visible only on small devices */}
             <div className="flex items-center gap-4 md:hidden">
               {/* Wishlist Icon */}
-              <div className="text-xl cursor-pointer" onClick={() => setOpenDrawer("wishlist")}>
+              <div className="relative text-xl cursor-pointer" >
                 <FaRegHeart />
+                {cartItemCount > 0 && (
+                  <div className="absolute -top-2 -right-2 bg-theme text-secondary text-[10px] rounded-full w-[18px] h-[18px] flex items-center justify-center">
+                    {cartItemCount}
+                  </div>
+                )}
               </div>
 
               {/* Cart Icon */}
@@ -177,9 +192,6 @@ const MainHeader = () => {
             <CartTotal onClose={handleClose} />
           </HeaderOffCanvas>
 
-          <HeaderOffCanvas isOpen={openDrawer === "wishlist"} onClose={handleClose} title="Wishlist" width="w-full md:w-[30%]">
-            <WishlistContent />
-          </HeaderOffCanvas>
 
           <HeaderOffCanvas isOpen={openDrawer === "account"} onClose={handleClose} title={token ? "Dashboard" : "Account"} width="w-full md:w-[35%]">
             <AccountContent />

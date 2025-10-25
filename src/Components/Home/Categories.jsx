@@ -17,7 +17,6 @@ const Categories = () => {
 
   const activeCategories =
     categoriesData?.filter((category) => category.status === "active") || [];
-console.log(activeCategories);
   const handleGoCategory = (categorySlug) => {
     try {
         navigate(`/category/${categorySlug}`, {

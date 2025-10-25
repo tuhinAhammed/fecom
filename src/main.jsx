@@ -19,6 +19,7 @@ import TrendingProduct from "./Pages/TrendingProduct.jsx";
 import Cart from "./Pages/Cart..jsx";
 import SingleCategory from "./Pages/SingleCategory.jsx";
 import Error from "./Pages/Error.jsx";
+import Wishlist from "./Pages/Wishlist.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -67,6 +68,11 @@ const router = createBrowserRouter([
         path: "/category/:slug",
         index: true,
         element: <SingleCategory />,
+      },
+      {
+        path: "/wishlist",
+        index: true,
+        element: <Wishlist />,
       },
       {
         path: "*",
