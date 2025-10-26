@@ -19,7 +19,7 @@ export default {
         "2xl": "3080px", // Extra large devices
       },
       colors: {
-        theme: "#027BFF", // Website Theme Color
+        theme: "#2B7FFF", // Website Theme Color
         primary: "#000", // Text Like black
         secondary: "#fff", // text White
         tertiary: "#616060",

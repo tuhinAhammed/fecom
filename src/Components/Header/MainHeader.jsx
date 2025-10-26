@@ -41,7 +41,7 @@ const MobileMenuContent = () => (
         <PiShootingStar className='text-xl ' />
         <MidTitle className="!font-normal !text-base" text="New Arrivals" />
       </NavLink>
-      <NavLink className="flex items-center gap-2 text-primary hover:text-theme duration-100" to="/about">
+      <NavLink className="flex items-center gap-2 text-primary hover:text-theme duration-100" to="/about-us">
         <LuInfo className='text-xl ' />
         <MidTitle className="!font-normal !text-base" text="About Us" />
       </NavLink>
@@ -89,7 +89,7 @@ const MainHeader = () => {
                 <img
                   src={sitelogo}
                   alt="Logo"
-                  className="w-[80px] sm:w-[90px] md:w-[140px] lg:w-[150px]"
+                  className="w-[80px] sm:w-[90px] md:w-[220px] lg:w-[220px] py-4"
                 />
               </NavLink>
             </div>
@@ -111,7 +111,7 @@ const MainHeader = () => {
                       <PiShootingStar className='text-xl ' />
                       <MidTitle className="!font-normal !text-base" text="New Arrivals" />
                     </NavLink>
-                    <NavLink className="flex items-center gap-2 text-primary hover:text-theme duration-100" to="/about">
+                    <NavLink className="flex items-center gap-2 text-primary hover:text-theme duration-100" to="/about-us">
                       <LuInfo className='text-xl ' />
                       <MidTitle className="!font-normal !text-base" text="About Us" />
                     </NavLink>

@@ -20,6 +20,12 @@ import Cart from "./Pages/Cart..jsx";
 import SingleCategory from "./Pages/SingleCategory.jsx";
 import Error from "./Pages/Error.jsx";
 import Wishlist from "./Pages/Wishlist.jsx";
+import PrivacyPolicy from "./Pages/PrivacyPolicy.jsx";
+import TermsCondition from "./Pages/TermsCondition.jsx";
+import OrderStatus from "./Pages/OrderStatus.jsx";
+import Faqs from "./Pages/Faqs.jsx";
+import ReturnPolicy from "./Pages/RetirnPolicy.jsx";
+import Support from "./Pages/Support.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +41,7 @@ const router = createBrowserRouter([
         element: <Shop />,
       },
       {
-        path: "/about",
+        path: "/about-us",
         index: true,
         element: <About />,
       },
@@ -73,6 +79,36 @@ const router = createBrowserRouter([
         path: "/wishlist",
         index: true,
         element: <Wishlist />,
+      },
+      {
+        path: "/privacy-policy",
+        index: true,
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/terms-condition",
+        index: true,
+        element: <TermsCondition />,
+      },
+      {
+        path: "/return-policy",
+        index: true,
+        element: <ReturnPolicy />,
+      },
+      {
+        path: "/support",
+        index: true,
+        element: <Support />,
+      },
+      {
+        path: "/order-status",
+        index: true,
+        element: <OrderStatus />,
+      },
+      {
+        path: "/faqs",
+        index: true,
+        element: <Faqs />,
       },
       {
         path: "*",

@@ -10,14 +10,14 @@ import {
     FaYoutube,
 } from "react-icons/fa6";
 import { IoIosCall, IoMdMail } from "react-icons/io";
-import { MdAddCall } from "react-icons/md";
+import { MdAddCall, MdOutlineMail  } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import MinTitle from "../../Layout/Title/MinTitle";
-import { AiOutlinePinterest, AiOutlineTikTok } from "react-icons/ai";
+import { AiOutlineMail, AiOutlinePinterest, AiOutlineTikTok } from "react-icons/ai";
 import { ImPinterest } from "react-icons/im";
 import { PiThreadsLogoFill } from "react-icons/pi";
-import { TfiPinterest } from "react-icons/tfi";
+import { TfiEmail, TfiPinterest } from "react-icons/tfi";
 import { BsThreads } from "react-icons/bs";
 import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
@@ -31,6 +31,9 @@ import stripe from "../../assets/Footer/stripe.png";
 import visa from "../../assets/Footer/visa.png";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { CgLock, CgMail } from "react-icons/cg";
+import { BiMapPin } from "react-icons/bi";
+import { IoTimeOutline } from "react-icons/io5";
 // import Swal from 'sweetalert2/dist/sweetalert2.js'
 // import "sweetalert2/src/sweetalert2.scss";
 const short_bio = "We have clothes that suits your style and which you’re proud to wear. From women to men."
@@ -103,10 +106,6 @@ const SocialContactData = [
 ];
 export const infomationLink = [
     {
-        name: "Blogs",
-        link: "/blogs",
-    },
-    {
         name: "About Us",
         link: "about-us",
     },
@@ -116,8 +115,8 @@ export const infomationLink = [
         link: "/privacy-policy",
     },
     {
-        name: "Term Condition",
-        link: "/term-condition",
+        name: "Terms & Condition",
+        link: "/terms-condition",
     },
 ];
 
@@ -128,15 +127,11 @@ export const quickLink = [
     // },
     {
         name: "Order Tracking",
-        link: "/order-track",
+        link: "/order-status",
     },
     {
         name: "FAQs",
         link: "/faqs",
-    },
-    {
-        name: "Refund policy",
-        link: "/refund-policy",
     },
     {
         name: "Return policy",
@@ -220,8 +215,8 @@ const Footer = () => {
         <>
             <div className="pt-8 pb-6   !z-[6] relative">
                 <Container>
-                    <div className="grid justify-between grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4  2xl:grid-cols-4 gap-4 sm:gap-8 md:gap-10 lg:gap-12">
-                        <div className="col-span-1 ">
+                    <div className="grid justify-between grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 xl:grid-cols-5   gap-4 sm:gap-8 md:gap-10 lg:gap-12">
+                        <div className="lg:col-span-2 ">
                             <NavLink to="/" className="logo flex gap-x-2 items-center">
                                 <img
                                     src={site_footer_logo}
@@ -238,32 +233,33 @@ const Footer = () => {
                                 }
                             />
 
-                                {SocialContactData?.length > 0 && (
-                                    <div className="">
-                                        {/* <MidTitle
+                            {SocialContactData?.length > 0 && (
+                                <div className="">
+                                    {/* <MidTitle
                                             text="Follow Us"
                                             className="inline-block  !text-secondary font-bold pt-6"
                                         /> */}
 
-                                        <div className="flex flex-wrap items-center gap-1 sm:gap-2 md:gap-3 lg:gap-2 mt-3 sm:mt-2 lg:mt-4 ">
-                                            {SocialContactData.map((item, index) => (
-                                                <a
-                                                    key={index}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href={item.link}
-                                                    className="text-sm md:text-lg lg:text-base p-1 md:p-1 lg:p-2 bg-transparent hover:bg-theme hover:text-secondary  text-primary hover:translate-y-[-10%] duration-300 rounded-md !cursor-pointer shadow-lg"
-                                                >
-                                                    {item.icon}
-                                                </a>
-                                            ))}
-                                        </div>
+                                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 md:gap-3 lg:gap-2 mt-3 sm:mt-2 lg:mt-4 ">
+                                        {SocialContactData.map((item, index) => (
+                                            <a
+                                                key={index}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href={item.link}
+                                                className="text-sm md:text-lg lg:text-base p-1 md:p-1 lg:p-2 bg-transparent hover:bg-theme hover:text-secondary  text-primary hover:translate-y-[-10%] duration-300 rounded-md !cursor-pointer shadow-lg"
+                                            >
+                                                {item.icon}
+                                            </a>
+                                        ))}
                                     </div>
-                                )}
+                                </div>
+                            )}
 
                         </div>
                         <div className="col-span-3">
-                            <div className=" grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 md:gap-8text-xs md: lg:gap-12">
+                            <div className=" grid grid-cols-3 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8text-xs md: lg:gap-12">
+
                                 <div className="lg:col-span-1">
                                     <MidTitle
                                         text="INFORMATION"
@@ -274,7 +270,7 @@ const Footer = () => {
                                             <li key={index} className="pb-0 md:pb-2">
                                                 <NavLink to={item.link} className="relative group">
                                                     <MinTitle
-                                                        className="text-primary text-md duration-300 inline-block group-hover:text-primary font-normal opacity-[0.7]"
+                                                        className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal opacity-[0.7]"
                                                         text={item.name}
                                                     />
                                                     {/* After pseudo-element equivalent */}
@@ -284,7 +280,6 @@ const Footer = () => {
                                         ))}
                                     </ul>
                                 </div>
-
                                 <div className="lg:col-span-1">
                                     <MidTitle
                                         text="HELP"
@@ -295,7 +290,7 @@ const Footer = () => {
                                             <li key={index} className="pb-0 md:pb-2">
                                                 <NavLink to={item.link} className="relative group">
                                                     <MinTitle
-                                                        className="text-primary text-md duration-300 inline-block group-hover:text-primary font-normal opacity-[0.7]"
+                                                        className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal opacity-[0.7]"
                                                         text={item.name}
                                                     />
                                                     {/* After pseudo-element equivalent */}
@@ -307,44 +302,43 @@ const Footer = () => {
                                 </div>
                                 <div className="lg:col-span-1">
                                     <MidTitle
-                                        text="FAQ"
-                                        className="inline-block  !text-primary font-normal font-secondary uppercase"
+                                        text="CONTACT"
+                                        className="inline-block !text-primary font-normal font-secondary uppercase"
                                     />
-                                    <ul className="mt-2 md:mt-5 ">
-                                        {quickLink.map((item, index) => (
-                                            <li key={index} className="pb-0 md:pb-2">
-                                                <NavLink to={item.link} className="relative group">
-                                                    <MinTitle
-                                                        className="text-primary text-md duration-300 inline-block group-hover:text-primary font-normal opacity-[0.7]"
-                                                        text={item.name}
-                                                    />
-                                                    {/* After pseudo-element equivalent */}
-                                                    <span className="absolute left-0 top-full h-[2px] w-0 bg-white duration-300 group-hover:w-full"></span>
-                                                </NavLink>
-                                            </li>
-                                        ))}
+                                    <ul className="mt-3 md:mt-5 space-y-3">
+                                        <li className="flex items-center gap-2 group">
+                                            <BiMapPin className="w-5 h-5 text-primary opacity-80 group-hover:text-theme duration-100" />
+                                            <a
+                                                href="#"
+                                                className="text-primary text-md font-normal opacity-70 group-hover:text-theme duration-200"
+
+                                            >Head Office: Dhaka, Bangladesh</a>
+                                        </li>
+                                        <li className="flex items-center gap-2 group">
+                                            <MdOutlineMail className="w-5 h-5 text-primary opacity-80 group-hover:text-theme duration-200" />
+                                            <a target="_blank" href="mailto:support@objectfashion.com">
+
+                                            <MinTitle
+                                                href="mailto:support@objectfashion.com"
+                                                className="text-primary text-md font-normal opacity-70 group-hover:text-theme duration-200"
+                                                text="support@objectfashion.com"
+                                            />
+                                            </a>
+                                                
+                                           
+                                        </li>
+
+                                        <li className="flex items-center gap-2 group">
+                                            <IoTimeOutline className="w-5 h-5 text-primary opacity-80 group-hover:text-theme duration-100" />
+                                            <MinTitle
+                                                className="text-primary text-md font-normal opacity-70 group-hover:text-theme duration-100"
+                                                text="Office Hours: Mon - Sat (10AM - 8PM)"
+                                            />
+                                        </li>
                                     </ul>
                                 </div>
-                                <div className="lg:col-span-1">
-                                    <MidTitle
-                                        text="RESOURCES"
-                                        className="inline-block  !text-primary font-normal font-secondary uppercase"
-                                    />
-                                    <ul className="mt-2 md:mt-5 ">
-                                        {quickLink.map((item, index) => (
-                                            <li key={index} className="pb-0 md:pb-2">
-                                                <NavLink to={item.link} className="relative group">
-                                                    <MinTitle
-                                                        className="text-primary text-md duration-300 inline-block group-hover:text-primary font-normal opacity-[0.7]"
-                                                        text={item.name}
-                                                    />
-                                                    {/* After pseudo-element equivalent */}
-                                                    <span className="absolute left-0 top-full h-[2px] w-0 bg-white duration-300 group-hover:w-full"></span>
-                                                </NavLink>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>
