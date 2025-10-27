@@ -71,10 +71,9 @@ const Cart = () => {
     const total = validSubTotal;
 
     // Fetch the number of selected cart items from Redux state
-    const cartItemCounter = cartItems.filter((item) => item.selected).length;
-    const handleCheckout = () => {
+    const cartItemCounter = cartItems.filter((item) => item.selected).length;const handleCheckout = () => {
         const selectedForCheckout = cartItems.filter((item) => item.selected);
-        console.log(selectedForCheckout);
+    
         if (selectedForCheckout.length === 0) {
             toast.warning("Please select at least one item to checkout!", {
                 position: `${toastr_position}`,
@@ -86,12 +85,34 @@ const Cart = () => {
                 progress: undefined,
                 theme: "light",
                 transition: Bounce,
-              });
+            });
+            return;
         }
-        else{
-            navigate("/checkout", { state: { selectedItems: selectedForCheckout } });
+    
+        // ✅ Check if any selected item has no size (variant)
+        const hasNoVariant = selectedForCheckout.some(
+            (item) => !item.variant || Object.keys(item.variant).length === 0
+        );
+    
+        if (hasNoVariant) {
+            toast.warning("Please select size for all selected products before checkout!", {
+                position: `${toastr_position}`,
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            return;
         }
+    
+        // ✅ Proceed to checkout
+        navigate("/checkout", { state: { selectedItems: selectedForCheckout } });
     };
+    
 
     return (
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionXl bg-secondary">

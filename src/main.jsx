@@ -26,6 +26,7 @@ import OrderStatus from "./Pages/OrderStatus.jsx";
 import Faqs from "./Pages/Faqs.jsx";
 import ReturnPolicy from "./Pages/RetirnPolicy.jsx";
 import Support from "./Pages/Support.jsx";
+import Checkout from "./Pages/Checkout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -109,6 +110,11 @@ const router = createBrowserRouter([
         path: "/faqs",
         index: true,
         element: <Faqs />,
+      },
+      {
+        path: "/checkout",
+        index: true,
+        element: <Checkout />,
       },
       {
         path: "*",

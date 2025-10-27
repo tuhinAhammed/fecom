@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MinTitle from "../../Layout/Title/MinTitle";
 import PrimaryButton from "../../Layout/Button/PrimaryButton";
-import { FaExchangeAlt, FaEye, FaRegHeart } from "react-icons/fa";
+import { FaExchangeAlt, FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { BiGitCompare } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ import { api, conversion_rate_to_tk, currency_symbol, toastr_position } from "..
 import MidTitle from "../Title/MidTitle";
 import BuyNowButton from "../Button/BuyNowButton";
 import { CgPentagonTopRight } from "react-icons/cg";
-
+import { addWishlistItem } from "../../Redux/Slice/wishlistSlice";
 const SecondaryProductCard = ({
   thumbnail,
   name,
@@ -44,7 +44,9 @@ const SecondaryProductCard = ({
   const loginToken = useSelector((state) => state.userData?.data?.token);
   const cartItems = useSelector((state) => state.cart.cartItems); // Access cartItems from Redux store
   const [wishlistLoading, setWishlistLoading] = useState(false);
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isInWishlist = wishlistItems.some(item => item.productId === productId);
   // const compareItems = useSelector((state) => state.compare.compareItems);
   // Fetch Currency From Local Storage
   const currencyData = useSelector(
@@ -167,57 +169,25 @@ const SecondaryProductCard = ({
 
   // Add  To Wishlist
 
-  const handleAddToWishlist = async () => {
-    if (!loginToken || loginToken === "") {
-      navigate("/signin");
+  const handleAddToWishlist = () => {
+    const alreadyExists = wishlistItems.some(
+      (item) =>
+        item.productId === productId 
+    );
+  
+    if (alreadyExists) {
+      toast.warning("Already exists in wishlist", {position: `${toastr_position}`, autoClose: 1500 });
       return;
     }
-
-    const loadingToastId = toast.loading("Adding to wishlist...", {
-      position: `${toastr_position}`,
-    }); // Show immediate feedback inside the existing ToastContainer
-
-    setWishlistLoading(true); // Start loading state
-
-    try {
-      const response = await axios.post(
-        addToWishlistApi,
-        { slug },
-        {
-          headers: {
-            Authorization: `Bearer ${loginToken}`,
-          },
-        }
-      );
-      Promise.resolve().then(() => {
-        if (response.data?.status === "success") {
-          toast.update(loadingToastId, {
-            render: response.data?.message,
-            type: "success",
-            isLoading: false,
-            autoClose: 1500,
-          });
-        } else {
-          toast.update(loadingToastId, {
-            render: response.data?.details,
-            type: "warning",
-            isLoading: false,
-            autoClose: 1500,
-          });
-        }
-      });
-    } catch (error) {
-      Promise.resolve().then(() => {
-        toast.update(loadingToastId, {
-          render: error.response?.data?.details || "An error occurred",
-          type: "warning",
-          isLoading: false,
-          autoClose: 1500,
-        });
-      });
-    } finally {
-      setWishlistLoading(false); // Stop loading
-    }
+  
+    dispatch(
+      addWishlistItem({
+        productId: productId,
+        variant: null,
+      })
+    );
+  
+    toast.success("Added to wishlist ❤️", {position: `${toastr_position}`, autoClose: 1500 });
   };
   const handleProductFetch = async () => {
     navigate(`/product/${slug}`);
@@ -261,26 +231,32 @@ const SecondaryProductCard = ({
       <div className="grid grid-cols-12 gap-4 items-center ">
 
         {/* Wishlist and Compare Icons */}
-        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/outer:opacity-100 transition-opacity duration-300 z-10">
+        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-1 group-hover/outer:opacity-100 transition-opacity duration-300 z-10">
           {/* Wishlist Button */}
-          <div className="relative w-full">
-            <div
-              onClick={handleAddToWishlist}
-              className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
-            >
-              <FaRegHeart className="text-base" />
-              {/* Tooltip on icon hover */}
+                {/* Wishlist Button */}
+                <div className="relative w-full">
+                  <div
+                    onClick={handleAddToWishlist}
+                    className={`flex items-center justify-center p-[6px]  bg-opacity-[0.8] bg-secondary text-primary shadow-md rounded-full cursor-pointer ${isInWishlist ? "hover:bg-secondary" : "hover:bg-theme"}  hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner`}
+                  >
+                    {
+                      isInWishlist ? 
+                    <FaHeart className="text-base text-red-500" />
+                    :
+                    <FaRegHeart className="text-base" />
+                  }
+                    {/* Tooltip on icon hover */}
 
-            </div>
-          </div>
-          <div className="relative ">
+                  </div>
+                </div>
+          {/* <div className="relative ">
             <div
               onClick={() => handleAddToCompare(slug)}
               className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner"
             >
               <BiGitCompare className="text-base" />
 
-              {/* 
+                    <span>
                       {(() => {
                         var fullText = "Compare";
                         var maxLength = 12;
@@ -288,16 +264,16 @@ const SecondaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span> */}
+                    </span>
             </div>
-          </div>
-          <div className="relative w-full">
+          </div> */}
+          {/* <div className="relative w-full">
             <div
               onClick={handleViewModal}
               className="flex items-center justify-center p-[6px] bg-secondary bg-opacity-[0.8] text-primary shadow-md rounded-md cursor-pointer hover:bg-theme hover:text-secondary active:bg-secondary active:text-theme duration-200 group/inner w-full"
             >
               <FaEye className="text-base" />
-              {/* 
+              <span>
                       {(() => {
                         const fullText = "Quick View";
                         const maxLength = 12;
@@ -305,9 +281,9 @@ const SecondaryProductCard = ({
                           ? fullText.slice(0, maxLength - 1) + "…"
                           : fullText;
                       })()}
-                    </span> */}
+                    </span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Image container with dynamic aspect ratio */}

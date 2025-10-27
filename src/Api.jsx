@@ -9,6 +9,7 @@ export const langingPageApi = `${baseApi}/landing-page`;
 export const singleProductApi = `${baseApi}/product/`;
 export const subscriptionPost = `${baseApi}/subscribe`;
 export const allProductApi = `${baseApi}/product-list`;
+export const orderApi = `${baseApi}/order`;
 
 
 

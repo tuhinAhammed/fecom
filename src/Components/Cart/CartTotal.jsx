@@ -18,11 +18,13 @@ import { FaMoneyCheckAlt, FaPlus } from "react-icons/fa";
 import { currency_symbol, singleProductApi } from "../../Api";
 import axios from "axios";
 import MinCartCard from "./MinCartCard";
-
+import { toast, Bounce } from "react-toastify";
+import { toastr_position } from "../../Api";
+import { useNavigate } from "react-router-dom";
 const CartTotal = ({ isVisibleValue, onClose }) => {
   const [cartItems, setCartItems] = useState([])
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   // Access cart items from Redux store
 
   const cartData = useSelector((state) => (state.cart.cartItems));
@@ -75,19 +77,45 @@ const CartTotal = ({ isVisibleValue, onClose }) => {
       dispatch(updateCartSummary({ index, quantity: newQuantity }));
     }
   };
-  // Translations
-  const getTranslatedName = (translations) => {
-    // If no translations available, return null (you'll need to handle this case)
-    if (!translations || !translations.length) return null;
+// Handle Go Checkout
+const handleCheckout = () => {
+  if (!cartItems || cartItems.length === 0) {
+    toast.warning("Your cart is empty!", {
+      position: `${toastr_position}`,
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+    return;
+  }
 
-    // Try to find matching translation
-    const match = translations.find(
-      (t) => t.lang_code === selectedLanguage?.lang_code
-    );
+  const hasNoVariant = cartItems.some(
+    (item) => !item.variant || Object.keys(item.variant).length === 0
+  );
 
-    // If no match found, return the first available translation's name or the original name
-    return match?.name || translations[0]?.name || null;
-  };
+  if (hasNoVariant) {
+    toast.warning("Please select a size for all products before checkout!", {
+      position: `${toastr_position}`,
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+    return;
+  }
+
+  onClose(); // Close the cart panel
+  navigate("/checkout", { state: { selectedItems: cartItems } });
+};
 
   return (
     <div>
@@ -178,11 +206,10 @@ const CartTotal = ({ isVisibleValue, onClose }) => {
             />
           </div>
           {/* </Link> */}
-          <div onClick={onClose} className="">
+          <div onClick={handleCheckout}  className="">
             <PrimaryButton
               className="hover:text-theme  hover:bg-transparent !border-theme "
               text="Checkout"
-              slug="checkout"
               icon={<IoArrowUndo />}
             />
           </div>
