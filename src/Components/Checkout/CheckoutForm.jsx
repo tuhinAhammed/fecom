@@ -62,7 +62,7 @@ const CheckoutForm = ({
 
           {/* Email */}
           <div>
-            <InputLabel text="Email Address" required />
+            <InputLabel text="Email Address" required={false} />
             <UserAuthInput
               onChange={(name, value) => handleChange("email", value)}
               type="email"

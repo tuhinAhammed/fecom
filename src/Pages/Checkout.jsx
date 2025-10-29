@@ -21,6 +21,7 @@ import PaymentGateway from "../Components/Checkout/PaymentGateway";
 import CheckoutForm from "../Components/Checkout/CheckoutForm";
 import axios from "axios";
 import MidTitle from "../Layout/Title/MidTitle";
+import OrderSuccess from "../Components/Checkout/OrderSuccess";
 const variants = {
     hidden: { opacity: 0, y: -20 },
     visible: { opacity: 1, y: 0 },
@@ -31,6 +32,7 @@ const Checkout = () => {
     const [deliveryType, setDeliveryType] = useState("");
     const [shippingCost, setShippingCost] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [couponApplyLoading, setCouponApplyLoading] = useState(false);
     // Access cartItems from Redux store
     const cartData = useSelector((state) => (state.cart.cartItems));
@@ -64,10 +66,14 @@ const Checkout = () => {
             // ✅ Filter only selected items
             const selectedItems = cartData.filter(item => item.selected === true);
       
-            if (selectedItems.length === 0) {
-              setProducts([]); // clear if nothing selected
-              return;
-            }
+            if (!cartData || cartData.length === 0) {
+                navigate("/shop");
+                return;
+              }
+              if (selectedItems.length === 0) {
+                navigate("/shop");
+                return;
+              }
       
             // ✅ Fetch product details for selected ones only
             const responses = await Promise.all(
@@ -83,13 +89,14 @@ const Checkout = () => {
             }));
       
             setProducts(mergedProducts);
+            setLoading(false)
           } catch (err) {
             console.error("Error fetching products:", err);
           }
         };
       
         productFetch();
-      }, [cartData]);
+      }, [cartData,navigate]);
       
 
     // Dalevery Handleler Chnage
@@ -255,194 +262,151 @@ const Checkout = () => {
 
     const handlePlaceOrder = async () => {
         try {
-            const formattedProducts = products.map((product) => ({
-                id: product.productId,
-                name: product.productName,
-                sku: product.sku,
-                quantity: product.quantity,
-                price: product.productPrice,
-                tax: product.tax,
-                vendor_id: product.vendorId,
-                variant: product.variant,
-            }));
+          // Clear previous field errors before new request
+          setInputErrors({
+            name: "",
+            email: "",
+            number: "",
+            billingAddress: "",
+          });
+      
 
-            const shipping_zone_id = billingFormData.shipToAnotherAddress
-                ? shippingFormData.shippingZone?.id
-                : billingFormData.shippingZone?.id;
-            const shipping_city_id = billingFormData.shipToAnotherAddress
-                ? shippingFormData.city.id
-                : "";
-            const shipping_state_id = billingFormData.shipToAnotherAddress
-                ? shippingFormData.state.id
-                : "";
-            const shipping_country_id = billingFormData.shipToAnotherAddress
-                ? shippingFormData.country.id
-                : "";
-
-            const free_shipping = products.every(
-                (product) => product.shippingCost === 0
-            )
-                ? 0
-                : 1;
-
-            const data = {
-                name: billingFormData.name,
-                email: billingFormData.email,
-                phone: billingFormData.number,
-                address: billingFormData.billingAddress,
-                delivery_type: deliveryType, // inside/outside Dhaka
-                shipping_cost: parseFloat(shippingCost || 0).toFixed(2),
-                subtotal: validSubTotal,
-                tax,
-                discount,
-                total: parseFloat(total || 0).toFixed(2),
-                payment: selectedPayment,
-                products: formattedProducts,
+      
+          // Build formatted product array
+          const formattedProducts = products.map((product) => ({
+            product_id: product.id || product.productId,
+            quantity: product.quantity,
+            variants: product.variant || "",
+            unit_price: parseFloat(product.offer_price),
+            product_name: product.product_name,
+            product_photo:
+              product.photos?.length > 0
+                ? `${product.photos[0].file_path}/${product.photos[0].file_name}`
+                : "",
+          }));
+      
+          // Final payload
+          const orderPayload = {
+            recipient_name: billingFormData.name,
+            recipient_phone: billingFormData.number,
+            recipient_address: billingFormData.billingAddress,
+            city: deliveryType === "inside" ? "Dhaka" : "Outside Dhaka",
+            shipping_cost: parseFloat(shippingCost),
+            coupon_code: couponCode || null,
+            delivery_option: "steadfast",
+            products: formattedProducts,
+            subtotal: parseFloat(validSubTotal.toFixed(2)),
+            vat: parseFloat(tax?.toFixed(2) || 0),
+            total: parseFloat(total.toFixed(2)),
+          };
+      
+          console.log("🚀 Final Order Payload:", orderPayload);
+      
+          const response = await axios.post(orderApi, orderPayload, {
+            headers: {
+              Authorization: `Bearer ${loginToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+      
+          console.log("📦 Order API Response:", response);
+      
+          const { data } = response;
+      
+          // ✅ Check for backend validation errors (even if HTTP 200)
+          if (data.errors || data.status === 400) {
+            const errors = data.errors || {};
+      
+            // Map backend field names to frontend field names
+            const mappedErrors = {
+              name: errors.recipient_name ? errors.recipient_name[0] : "",
+              number: errors.recipient_phone ? errors.recipient_phone[0] : "",
+              billingAddress: errors.recipient_address ? errors.recipient_address[0] : "",
             };
-
-            const response = await axios.post(OrderPlaceMent, data, {
-                headers: {
-                    Authorization: `Bearer ${loginToken}`,
-                },
+      
+            // Push validation errors to the CheckoutForm
+            setInputErrors((prev) => ({ ...prev, ...mappedErrors }));
+      
+            // 🔸 ADD: Show toast for required fields
+            toast.warning("Please fill the required fields.", {
+              position: `${toastr_position}`,
+              autoClose: 2500,
+              theme: "light",
+              transition: Bounce,
             });
-
-            const { status, message, errors } = response.data || {};
-            if (response.status === 201) {
-                const orderDetails =
-                    Array.isArray(response.data) && response.data.length > 0
-                        ? response.data[0]?.order
-                        : null; // Handle empty array case
-
-                console.log(orderDetails);
-                navigate(`/checkout/success/${orderDetails.invoice_no}`, {
-                    state: {
-                        orderDetails,
-                        invoiceNumber: orderDetails.invoice_no, // Send invoice number
-                    },
-                });
-                setInputErrors({});
-                toast.success("Order Placed Successfully", {
-                    position: `${toastr_position}`,
-                    autoClose: 2500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
-                // here remove the product from cart which is ordered/ placed order
-                const orderedProductIds = formattedProducts.map(
-                    (product) => product.id
-                );
-                dispatch(removeOrderedItems(orderedProductIds));
-                // navigate(`/order/${formData.invoiceNumber}`, {
-                // state: {
-                // orderDetails, // Send order details
-                // invoiceNumber: formData.invoiceNumber // Send invoice number
-                // },
-                // });
-            } else if (status === "failed" || errors) {
-                // setInputErrors({
-                //     firstName: errors?.first_name ? errors.first_name[0] : "",
-                //     lastName: errors?.last_name ? errors.last_name[0] : "",
-                //     email: errors?.email ? errors.email[0] : "",
-                //     phoneNumber: errors?.phone ? errors.phone[0] : "",
-                //     country: errors?.billing_country_id
-                //         ? errors.billing_country_id[0]
-                //         : "",
-                //     state: errors?.billing_state_id ? errors.billing_state_id[0] : "",
-                //     city: errors?.billing_city_id ? errors.billing_city_id[0] : "",
-                //     shippingZone:
-                //         billingFormData.shipToAnotherAddress && errors?.shipping_zone_id
-                //             ? errors.shipping_zone_id[0]
-                //             : "",
-                //     billingAddress: errors?.address ? errors.address[0] : "",
-                //     shippingAddress:
-                //         billingFormData.shipToAnotherAddress && errors?.delivery_address
-                //             ? errors.delivery_address[0]
-                //             : "",
-                // });
-
-                toast.warning("Validation failed. Please check your inputs.", {
-                    position: `${toastr_position}`,
-                    autoClose: 2500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
-            } else {
-                toast.error(message || "An unexpected error occurred.", {
-                    position: `${toastr_position}`,
-                    autoClose: 2500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
-            }
+      
+            console.warn("❌ Validation Errors:", mappedErrors);
+            return; // ⛔ Stop execution — no success flow
+          }
+                // 🔸 ADD: Check if delivery type is selected
+                if (!deliveryType) {
+                    toast.warning("Please select your delivery area (Inside/Outside Dhaka).", {
+                      position: `${toastr_position}`,
+                      autoClose: 2500,
+                      theme: "light",
+                      transition: Bounce,
+                    });
+                    return; // stop here
+                  }
+                  if (response.status === 200 || response.status === 201) {
+                    toast.success("Order placed successfully!", {
+                      position: `${toastr_position}`,
+                      autoClose: 2000,
+                      theme: "light",
+                      transition: Bounce,
+                    });
+                  
+                    const orderedProductIds = formattedProducts.map((p) => p.product_id);
+                    dispatch(removeOrderedItems(orderedProductIds));
+                    setShowSuccessPopup(true); // ✅ show popup after order success
+                    setTimeout(() => {
+                        navigate("/shop");
+                      }, 10000); // 2s delay to let user see popup
+                  } else {
+            toast.error(response.data.message || "Order failed. Try again.", {
+              position: `${toastr_position}`,
+              autoClose: 2500,
+            });
+          }
         } catch (error) {
-            console.log(error);
-            if (error.response && error.response.data) {
-                const { errors, message } = error.response.data;
-                // setInputErrors({
-                //     firstName: errors?.first_name ? errors.first_name[0] : "",
-                //     lastName: errors?.last_name ? errors.last_name[0] : "",
-                //     email: errors?.email ? errors.email[0] : "",
-                //     phoneNumber: errors?.phone ? errors.phone[0] : "",
-                //     country: errors?.billing_country_id
-                //         ? errors.billing_country_id[0]
-                //         : "",
-                //     state: errors?.billing_state_id ? errors.billing_state_id[0] : "",
-                //     city: errors?.billing_city_id ? errors.billing_city_id[0] : "",
-                //     shippingZone:
-                //         billingFormData.shipToAnotherAddress && errors?.shipping_zone_id
-                //             ? errors.shipping_zone_id[0]
-                //             : "",
-                //     billingAddress: errors?.address ? errors.address[0] : "",
-                //     shippingAddress:
-                //         billingFormData.shipToAnotherAddress && errors?.delivery_address
-                //             ? errors.delivery_address[0]
-                //             : "",
-                // });
-
-                toast.warning(
-                    message || "Validation failed. Please check your inputs.",
-                    {
-                        position: `${toastr_position}`,
-                        autoClose: 2500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                        transition: Bounce,
-                    }
-                );
-            } else {
-                toast.error("An error occurred. Please try again later.", {
-                    position: `${toastr_position}`,
-                    autoClose: 2500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
-            }
+          console.error("❌ Order placement error:", error);
+      
+          const errors = error.response?.data?.errors || {};
+          if (Object.keys(errors).length > 0) {
+            // ✅ Convert backend errors to your inputErrors structure
+            const mappedErrors = {
+              name: errors.recipient_name ? errors.recipient_name[0] : "",
+              number: errors.recipient_phone ? errors.recipient_phone[0] : "",
+              billingAddress: errors.recipient_address ? errors.recipient_address[0] : "",
+            };
+            setInputErrors((prev) => ({ ...prev, ...mappedErrors }));
+      
+            // 🔸 ADD: Show toast for required fields (from catch block too)
+            toast.warning("Please fill the required fields.", {
+              position: `${toastr_position}`,
+              autoClose: 2500,
+              theme: "light",
+              transition: Bounce,
+            });
+          } else {
+            const message =
+              error.response?.data?.message ||
+              "An unexpected error occurred while placing your order.";
+      
+            toast.error(message, {
+              position: `${toastr_position}`,
+              autoClose: 3000,
+              theme: "light",
+              transition: Bounce,
+            });
+          }
         }
-    };
+      };
+      
+      
+      
+      
+      
 
 
 
@@ -453,8 +417,11 @@ const Checkout = () => {
                     <Breadcrumb
                         title="Checkout"
                     />
+                    {/* Order Success */}
+                    <OrderSuccess show={showSuccessPopup} onClose={() => setShowSuccessPopup(false)} />
+
                     <div className="lg:grid lg:grid-cols-12 items-start justify-center pt-[15px] sm:pt-sectionSm lg:pt-sectionSm relative gap-6">
-                        <div className="col-span-7 ">
+                        <div className="col-span-7 lg:sticky lg:top-32 lg:left-0">
                             <div className=" ">
                                 <CheckoutForm
                                     billingFormData={billingFormData}
@@ -516,7 +483,7 @@ const Checkout = () => {
                                     />
                                 )}
                                 {/* Coupon Apply */}
-                                <div className="pt-4 px-2 md:px-4 ">
+                                {/* <div className="pt-4 px-2 md:px-4 ">
                                     <CouponCodeApplyButton
                                         onClick={applyCouponCode}
                                         onChange={handleCouponCode}
@@ -528,7 +495,7 @@ const Checkout = () => {
                                             {couponCodeError}
                                         </p>
                                     )}
-                                </div>
+                                </div> */}
                                 {/* Ammount Summary */}
                                 <div className="py-4 px-2 md:px-4 ">
                                     {/* Calculate cart summary */}
@@ -572,7 +539,7 @@ const Checkout = () => {
                                                 ).toFixed(2)}`}
                                             />
                                         </div> */}
-                                        <div className="flex justify-between">
+                                        {/* <div className="flex justify-between">
                                             <MidTitle
                                                 text="Discount"
                                             />
@@ -581,7 +548,7 @@ const Checkout = () => {
                                                     discount / (parseFloat(conversion_rate_to_tk) || 1)
                                                 ).toFixed(2)}`}
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     {/* Checkout Buttons */}
@@ -599,8 +566,10 @@ const Checkout = () => {
                             </div>
                             {/* Payment Method */}
                             <div
-                                className="py-[20px] sm:py-sectionSm lg:py-sectionSm  bg-[#F9F9F9] rounded-md relative mt-6 "
-                                style={{ boxShadow: "0px 0px 5px 0px rgba(0 0 0 / 10%)" }}
+                                className="lg:pb-sectionSm  bg-[#F9F9F9] rounded-md relative mt-6 border-b border-theme border-opacity-[0.3] overflow-hidden"
+                                style={{
+                                    boxShadow: "0px 0px 25px  rgba(0,0,0,0.20)",
+                                }}
                             >
                                 <div className="flex items-center gap-2 py-4 bg-theme bg-opacity-[0.18] px-4  ">
                                     <MdOutlinePayment />

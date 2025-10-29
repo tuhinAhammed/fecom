@@ -1,81 +1,152 @@
-import React from "react";
+import React, { useState } from "react";
 import MinTitle from "../../Layout/Title/MinTitle";
-
+import MidTitle from "../../Layout/Title/MidTitle";
+import mobileBanking from "../../assets/PaymentGateway/mobileBanking.png"
+import bkash from "../../assets/paymentGateway/bkash.jpg";
+import nogod from "../../assets/paymentGateway/nogod.png";
+import rocket from "../../assets/paymentGateway/rocket.png";
+import dutch from "../../assets/paymentGateway/dutch.jpg";
+import mastercard from "../../assets/paymentGateway/mastercard.png";
+import pp from "../../assets/paymentGateway/PP.png";
+import stripe from "../../assets/paymentGateway/stripe.png";
+import visa from "../../assets/paymentGateway/visa.png";
 const PaymentGateway = ({
   paymentMethods = [],
   selectedPayment,
   setSelectedPayment,
   loading,
 }) => {
-  // ✅ Default fallback data if parent sends nothing
   const defaultPaymentMethods = [
     {
-      id: 1,
+      id: "bkash",
       name: "Bkash",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/9/9d/BKash_logo.svg",
+      type: "mobile",
+      icon: bkash,
     },
     {
-      id: 2,
+      id: "nagad",
       name: "Nagad",
-      icon: "https://upload.wikimedia.org/wikipedia/en/8/8e/Nagad_Logo.svg",
+      type: "mobile",
+      icon: nogod,
     },
     {
-      id: 3,
+      id: "rocket",
       name: "Rocket",
-      icon: "https://play-lh.googleusercontent.com/ea9mD0aNshw1EFS5_VzS1x2ONpUZ5uMY5WZ02KciW5sC8nbVySjr8DK0b4vSmGMBQHo",
+      type: "mobile",
+      icon: rocket,
     },
     {
-      id: 4,
+      id: "visa",
       name: "Visa",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg",
+      type: "mobile",
+      icon: visa,
     },
     {
-      id: 5,
-      name: "MasterCard",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Mastercard_logo.png",
-    },
-    {
-      id: 6,
+      id: "cod",
       name: "Cash on Delivery",
+      type: "cod",
       icon: "https://cdn-icons-png.flaticon.com/512/2038/2038854.png",
     },
   ];
 
-  // ✅ Use props if provided, else fallback
   const availablePayments =
     paymentMethods.length > 0 ? paymentMethods : defaultPaymentMethods;
 
+  // Local state for mobile banking sub-selection
+  const [selectedMobileMethod, setSelectedMobileMethod] = useState(null);
+
+  const handleMainSelect = (type, id) => {
+    if (type === "cod") {
+      setSelectedPayment("cod");
+      setSelectedMobileMethod(null); // reset
+    } else if (type === "mobile") {
+      setSelectedPayment("mobile");
+    }
+  };
+
   return (
     <div>
-      <div className="pt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="pt-4 grid grid-cols-1 sm:grid-cols-1 gap-3 px-4">
         {loading
-          ? Array.from({ length: 6 }).map((_, index) => (
+          ? Array.from({ length: 2 }).map((_, index) => (
               <div
                 key={index}
                 className="bg-skeletonLoading animate-pulse p-1 rounded-lg h-20"
               ></div>
             ))
-          : availablePayments.map((item, index) => (
+          : (
+            <>
+              {/* Cash on Delivery */}
               <div
-                key={index}
-                onClick={() => setSelectedPayment && setSelectedPayment(item?.id)}
+                onClick={() => handleMainSelect("cod")}
                 className={`bg-secondary shadow-sm hover:shadow-theme active:scale-90 duration-300 p-1 rounded-lg cursor-pointer border ${
-                  selectedPayment === item.id ? "border-theme" : "border-transparent"
+                  selectedPayment === "cod" ? "border-theme bg-theme bg-opacity-[0.2]" : "border-transparent"
                 }`}
               >
-                <div className="p-1 border rounded-lg border-secondary">
-                  <div className="aspect-[4/4] max-h-[30px] m-auto">
+                <div className="flex items-center gap-4 py-1 px-4 border rounded-lg  border-borderColor ">
+                  <div className="aspect-[4/4] max-h-[20px] ">
                     <img
                       className="w-full h-full object-contain"
-                      src={item?.icon}
-                      alt={item?.name}
+                      src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
+                      alt="Cash on Delivery"
                     />
                   </div>
-                  <MinTitle className="text-center py-2" text={item?.name} />
+                  <MidTitle className="text-center py-2" text="Cash on Delivery" />
                 </div>
               </div>
-            ))}
+
+              {/* Mobile Banking (main option) */}
+              <div
+                onClick={() => handleMainSelect("mobile")}
+                className={`bg-secondary shadow-sm hover:shadow-theme active:scale-90 duration-300 p-1 rounded-lg cursor-pointer border ${
+                  selectedPayment === "mobile" ? "border-theme bg-theme bg-opacity-[0.2]" : "border-transparent"
+                }`}
+              >
+                <div className="flex items-center gap-4 py-1 px-4 border rounded-lg  border-borderColor ">
+                  <div className="aspect-[4/4] max-h-[25px] ">
+                    <img
+                      className="w-full h-full object-contain"
+                      src={mobileBanking}
+                      alt="Mobile Banking"
+                    />
+                  </div>
+                  <MidTitle className="text-center py-2" text="Mobile Banking" />
+                </div>
+              </div>
+            </>
+          )}
       </div>
+
+      {/* Sub-options for Mobile Banking */}
+      {selectedPayment === "mobile" && (
+        <div className="mt-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 px-4">
+            {availablePayments
+              .filter((item) => item.type === "mobile")
+              .map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    boxShadow: "0px 0px 8px  rgba(0,0,0,0.20)",
+                }}
+                  onClick={() => setSelectedMobileMethod(item.id)}
+                  className={`bg-secondary shadow-lg hover:shadow-theme active:scale-90 duration-300 p-1 rounded-lg cursor-pointer border-[1px] md:border-[2px] text-center ${
+                    selectedMobileMethod === item.id
+                      ? "border-theme shadow-theme"
+                      : "border-transparent "
+                  }`}
+                >
+                  <img
+                    className="w-10 h-10 mx-auto object-contain"
+                    src={item.icon}
+                    alt={item.name}
+                  />
+                  <p className="text-sm mt-2 font-medium">{item.name}</p>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
