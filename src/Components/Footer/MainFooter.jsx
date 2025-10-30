@@ -23,10 +23,10 @@ import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
-import mastercard from "../../assets/paymentGateway/mastercard.png";
-import nogod from "../../assets/paymentGateway/nogod.png";
+import mastercardPay from "../../assets/paymentGateway/mastercard.png";
+import nogodImg from "../../assets/paymentGateway/nogodImg.png";
 import pp from "../../assets/paymentGateway/PP.png";
-import stripe from "../../assets/paymentGateway/stripe.png";
+import stripeImg from "../../assets/paymentGateway/stripeImg.png";
 import visa from "../../assets/paymentGateway/visa.png";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -148,16 +148,16 @@ export const paymentMethod = [
     },
 
     {
-        image: mastercard,
+        image: mastercardPay,
     },
     {
-        image: nogod,
+        image: nogodImg,
     },
     {
         image: pp,
     },
     {
-        image: stripe,
+        image: stripeImg,
     },
     {
         image: visa,
