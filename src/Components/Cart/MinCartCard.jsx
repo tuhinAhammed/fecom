@@ -97,7 +97,7 @@ const MinCartCard = ({
             >
                 {/* Product Image */}
                 <div className="col-span-3">
-                    <div className="max-h-[50px] sm:max-h-[80px] md:max-h-[120px] aspect-[4/5] overflow-hidden rounded-sm">
+                    <div className="max-h-[90px] sm:max-h-[100px] md:max-h-[120px] aspect-[4/5] overflow-hidden rounded-sm">
                         <img
                             onClick={handleProductFetch}
                             loading="lazy"

@@ -190,7 +190,13 @@ const SecondaryProductCard = ({
     toast.success("Added to wishlist ❤️", {position: `${toastr_position}`, autoClose: 1500 });
   };
   const handleProductFetch = async () => {
-    navigate(`/product/${slug}`);
+    const productSlug = name
+      .toLowerCase()
+      .replace(/[^\w\s]/g, '') // Remove special characters
+      .replace(/\s+/g, '-')    // Replace spaces with hyphens
+      .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
+      .trim();
+    navigate(`/product/${productSlug}`, { state: { productId: productId } });
   };
 
   // Handle Modals
@@ -368,7 +374,7 @@ const SecondaryProductCard = ({
                   // slug={slug}
                   />
                   <BuyNowButton
-                    onClick={handleAddToCart}
+                    onClick={handleProductFetch}
                     className="w-full m-auto"
                     // link={"/"}
                     text={(() => {

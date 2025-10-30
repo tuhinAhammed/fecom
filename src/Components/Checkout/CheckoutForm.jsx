@@ -113,9 +113,9 @@ const CheckoutForm = ({
           </div>
           </div>
         {/* Delivery Type */}
-        <div className=" py-4 grid grid-cols-1 sm:grid-cols-2 gap-4 w-[60%]">
+        <div className=" py-4 grid  grid-cols-2 gap-4 w-full md:w-[60%]">
           {/* Inside Dhaka */}
-          <div className={`flex gap-2 px-4 items-center py-3 rounded-md cursor-pointer duration-200 border ${
+          <div className={`flex gap-2 px-4 items-center py-2 md:py-3 rounded-md cursor-pointer duration-200 border ${
               selectedDelivery === "inside"
                 ? "bg-theme text-white bg-opacity-[0.9] border-theme"
                 : "bg-theme bg-opacity-[0.1] border-theme"
@@ -138,7 +138,7 @@ const CheckoutForm = ({
           </div>
 
           {/* Outside Dhaka */}
-          <div className={`flex gap-2 px-4 items-center py-3 rounded-md cursor-pointer duration-200 border ${
+          <div className={`flex gap-2 px-4 items-center  py-2 md:py-3 rounded-md cursor-pointer duration-200 border ${
               selectedDelivery === "outside"
                 ? "bg-theme text-white bg-opacity-[0.9] border-theme"
                 : "bg-theme bg-opacity-[0.1] border-theme"

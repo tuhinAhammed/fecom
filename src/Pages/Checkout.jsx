@@ -4,7 +4,7 @@ import Container from "../Layout/Container";
 import { MdOutlinePayment } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, Bounce } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
     removeOrderedItems,
     updateCartSummary,
@@ -22,11 +22,20 @@ import CheckoutForm from "../Components/Checkout/CheckoutForm";
 import axios from "axios";
 import MidTitle from "../Layout/Title/MidTitle";
 import OrderSuccess from "../Components/Checkout/OrderSuccess";
+import { FaCartShopping } from "react-icons/fa6";
+import PrimaryButton from "../Layout/Button/PrimaryButton";
+import { BsCartX } from "react-icons/bs";
 const variants = {
     hidden: { opacity: 0, y: -20 },
     visible: { opacity: 1, y: 0 },
 };
 const Checkout = () => {
+    const location = useLocation();
+    const cartData = useSelector((state) => (state.cart.cartItems));
+    const initialCartData = location.state?.cartItems || cartData;
+    const selectedProductsItems = initialCartData.filter(item => item.selected === true);
+    const isSingleProductCheckout = location.state?.cartItems?.length === 1;
+console.log(location.state , selectedProductsItems.length);
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [deliveryType, setDeliveryType] = useState("");
@@ -35,7 +44,6 @@ const Checkout = () => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [couponApplyLoading, setCouponApplyLoading] = useState(false);
     // Access cartItems from Redux store
-    const cartData = useSelector((state) => (state.cart.cartItems));
     const [cartItems , setCartItems] = useState([])
     const [products, setProducts] = useState([]);
     const [couponCode, setCouponCode] = useState("");
@@ -44,6 +52,7 @@ const Checkout = () => {
     const loginToken = useSelector((state) => state.userData?.data?.token);
     const toastShown = useRef(false); // Prevent multiple toasts
     const dispatch = useDispatch();
+
     const navigate = useNavigate();
     const [billingFormData, setBillingFormData] = useState({
         name: "",
@@ -59,27 +68,28 @@ const Checkout = () => {
     });
 
     useEffect(() => {
+        // if (!cartData || cartData.length === 0) return;
+        const selectedItems = selectedProductsItems
+
         const productFetch = async () => {
-          if (!cartData || cartData.length === 0) return;
-      
           try {
-            // ✅ Filter only selected items
-            const selectedItems = cartData.filter(item => item.selected === true);
-      
-            if (!cartData || cartData.length === 0) {
-                navigate("/shop");
-                return;
-              }
-              if (selectedItems.length === 0) {
-                navigate("/shop");
-                return;
-              }
-      
+            // if (!cartData || cartData.length === 0) {
+            //     navigate("/shop");
+            //     // return;
+            //   }
+            //   if (selectedItems.length === 0) {
+            //     navigate("/shop");
+            //     // return;
+            //   }
+            // if (selectedItems.length === 0) {
+            //     navigate("/cart");
+            //     return;
+            //   }
             // ✅ Fetch product details for selected ones only
             const responses = await Promise.all(
               selectedItems.map(item => axios.get(`${singleProductApi}${item.productId}`))
             );
-      
+            console.log(responses);
             // ✅ Merge API data with local cart info
             const mergedProducts = responses.map((res, i) => ({
               ...res.data.product, // full product info
@@ -94,9 +104,8 @@ const Checkout = () => {
             console.error("Error fetching products:", err);
           }
         };
-      
         productFetch();
-      }, [cartData,navigate]);
+      }, [cartData ]);
       
 
     // Dalevery Handleler Chnage
@@ -113,8 +122,6 @@ const Checkout = () => {
     const [isLoading, setIsLoading] = useState(true);
     // const demo = useSelector((state) => console.log(state));
 
-
-
     const handleQuantityChange = (index, newQuantity) => {
         if (newQuantity > 0) {
             dispatch(updateCartSummary({ index, quantity: newQuantity }));
@@ -128,40 +135,6 @@ const Checkout = () => {
 
     const validSubTotal = isNaN(subTotal) ? 0 : subTotal;
 
-    // Calculate discount based on applicable products
-    const discount = (() => {
-        if (!applyedCoupon?.discount || isNaN(subTotal)) return 0; // No discount applied
-
-        const applicableProductIds = applyedCoupon?.applicable_products || [];
-
-        if (applicableProductIds.length === 0) {
-            if (!applyedCoupon?.discount || isNaN(subTotal)) return 0; // No discount applied
-            if (applyedCoupon.discount_type === 1) {
-                return applyedCoupon.discount; // Fixed discount amount
-            } else if (applyedCoupon.discount_type === 2) {
-                return (subTotal * applyedCoupon.discount) / 100; // Percentage-based discount
-            }
-            return 0;
-            // return 0; // No applicable products, no discount
-        }
-
-        // Filter only applicable products
-        const applicableProducts = cartItems.filter((item) =>
-            applicableProductIds.includes(item.productId.toString())
-        );
-
-        const applicableSubTotal = applicableProducts.reduce(
-            (acc, item) => acc + item.productPrice * item.quantity,
-            0
-        );
-
-        if (applyedCoupon.discount_type === 1) {
-            return applyedCoupon.discount; // Fixed discount amount
-        } else if (applyedCoupon.discount_type === 2) {
-            return (applicableSubTotal * applyedCoupon.discount) / 100; // Percentage discount
-        }
-        return 0;
-    })();
 
 
     // Tax Calculated
@@ -177,7 +150,7 @@ const Checkout = () => {
 
     const tax = calculateTotalTax();
 
-    const total = subTotal + shippingCost  - discount;
+    const total = subTotal + shippingCost ;
 
     // Coupon Code
     const handleCouponCode = (e) => {
@@ -256,10 +229,7 @@ const Checkout = () => {
         }
     };
 
-    // console.log(couponCode);
-
     // Pameny Gateway
-
     const handlePlaceOrder = async () => {
         try {
           // Clear previous field errors before new request
@@ -349,19 +319,19 @@ const Checkout = () => {
                     return; // stop here
                   }
                   if (response.status === 200 || response.status === 201) {
-                    toast.success("Order placed successfully!", {
-                      position: `${toastr_position}`,
-                      autoClose: 2000,
-                      theme: "light",
-                      transition: Bounce,
-                    });
+                    // toast.success("Order placed successfully!", {
+                    //   position: `${toastr_position}`,
+                    //   autoClose: 2000,
+                    //   theme: "light",
+                    //   transition: Bounce,
+                    // });
                   
                     const orderedProductIds = formattedProducts.map((p) => p.product_id);
                     dispatch(removeOrderedItems(orderedProductIds));
                     setShowSuccessPopup(true); // ✅ show popup after order success
                     setTimeout(() => {
-                        navigate("/shop");
-                      }, 10000); // 2s delay to let user see popup
+                        navigate("/dashboard");
+                      }, 5000); 
                   } else {
             toast.error(response.data.message || "Order failed. Try again.", {
               position: `${toastr_position}`,
@@ -402,11 +372,6 @@ const Checkout = () => {
           }
         }
       };
-      
-      
-      
-      
-      
 
 
 
@@ -419,7 +384,43 @@ const Checkout = () => {
                     />
                     {/* Order Success */}
                     <OrderSuccess show={showSuccessPopup} onClose={() => setShowSuccessPopup(false)} />
+                        {
+                            !cartData  ?
+                            <div className="m-auto text-center py-12">
+                            <p className="text-4xl sm:text-5xl md:text-4xl lg:text-6xl text-tertiary text-opacity-[0.2] text-center">
+                                <BsCartX className="text-center m-auto" />
+                            </p>
+                            <MinTitle
+                                className="py-3 sm:py-4 md:py-5 text-tertiary"
+                                text="Your Cart is Empty!"
+                            />
 
+                            <PrimaryButton
+                                className="hover:text-theme !text-base hover:bg-transparent w-full sm:w-[60%] md:w-[25%] lg:w-[20%] m-auto !uppercase !text-xs active:text-secondary hover:border-theme active:border-"
+                                text="Return To Shop"
+                                slug="shop"
+                                icon={<FaCartShopping />}
+                            />
+                        </div>
+                        : selectedProductsItems.length === 0
+                        ? (
+                            <div className="m-auto text-center py-12">
+                              <p className="text-4xl sm:text-5xl md:text-4xl lg:text-6xl text-tertiary text-opacity-[0.2] text-center">
+                                <BsCartX className="text-center m-auto" />
+                              </p>
+                              <MinTitle
+                                className="py-3 sm:py-4 md:py-5 text-tertiary"
+                                text="You Have Added Product In Cart but there have No Selected Items! Back to Cart and select for checkout"
+                              />
+                              <PrimaryButton
+                                className="hover:text-theme !text-base hover:bg-transparent w-full sm:w-[60%] md:w-[25%] lg:w-[20%] m-auto !uppercase !text-xs active:text-secondary hover:border-theme active:border-"
+                                text="Return To Cart"
+                                slug="cart"
+                                icon={<FaCartShopping />}
+                              />
+                            </div>
+                          )
+                        :
                     <div className="lg:grid lg:grid-cols-12 items-start justify-center pt-[15px] sm:pt-sectionSm lg:pt-sectionSm relative gap-6">
                         <div className="col-span-7 lg:sticky lg:top-32 lg:left-0">
                             <div className=" ">
@@ -471,7 +472,7 @@ const Checkout = () => {
                                                 variants={item.variants}
                                                 productPrice={item.offer_price}
                                                 quantity={item.quantity}
-                                                isLastItem={index === products.length - 1}
+                                                isSingleProductCheckout={isSingleProductCheckout}
                                               />
                                             );
                                         })}
@@ -600,6 +601,8 @@ const Checkout = () => {
                             </div>
                         </div>
                     </div>
+                        }
+
                 </Container>
             </div>
         </div>

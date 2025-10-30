@@ -24,7 +24,8 @@ const CheckoutCartCard = ({
     isLastItem,
     slug,
     variants,
-    onClose
+    onClose,
+    isSingleProductCheckout
 }) => {
     const dispatch = useDispatch();
     const { selectedCurrency } = useSelector((state) => state.currency) || {};
@@ -97,7 +98,7 @@ const CheckoutCartCard = ({
             >
                 {/* Product Image */}
                 <div className="col-span-3">
-                    <div className="max-h-[50px] sm:max-h-[80px] md:max-h-[120px] aspect-[4/5] overflow-hidden rounded-sm">
+                    <div className="max-h-[90px] sm:max-h-[100px] md:max-h-[120px] aspect-[4/5] overflow-hidden rounded-sm">
                         <img
                             onClick={handleProductFetch}
                             loading="lazy"
@@ -141,23 +142,32 @@ const CheckoutCartCard = ({
                         </div>
 
                         {/* Quantity and Delete */}
-                        <div className="flex justify-between items-center md:pt-2">
-                            <div className="flex items-center space-x-4 md:space-x-4 lg:space-x-5 bg-theme rounded-sm md:rounded-md p-[2px] px-3 md:px-4">
-                                <button
-                                    onClick={() => handleQuantityChange(quantity - 1)}
-                                    className="text-secondary text-[10px] sm:text-xs md:text-sm lg:text-base font-bold px-[2px]"
-                                >
-                                    -
-                                </button>
-                                <MinTitle className="text-secondary" text={quantity} />
-                                <button
-                                    onClick={() => handleQuantityChange(quantity + 1)}
-                                    className="text-secondary text-[10px] sm:text-xs md:text-sm lg:text-base px-[2px]"
-                                >
-                                    +
-                                </button>
-                            </div>
-                            {/* <div className="delete">
+                        {
+                            isSingleProductCheckout ?
+                                <div className="flex items-center gap-2 ">
+                                    <MinTitle
+                                        className="font-normal text-xs sm:text-sm md:text-base"
+                                        text={`Quantity : ${quantity}`}
+                                    />
+                                </div>
+                                :
+                                <div className="flex justify-between items-center md:pt-2">
+                                    <div className="flex items-center space-x-4 md:space-x-4 lg:space-x-5 bg-theme rounded-sm md:rounded-md p-[2px] px-3 md:px-4">
+                                        <button
+                                            onClick={() => handleQuantityChange(quantity - 1)}
+                                            className="text-secondary text-[10px] sm:text-xs md:text-sm lg:text-base font-bold px-[2px]"
+                                        >
+                                            -
+                                        </button>
+                                        <MinTitle className="text-secondary" text={quantity} />
+                                        <button
+                                            onClick={() => handleQuantityChange(quantity + 1)}
+                                            className="text-secondary text-[10px] sm:text-xs md:text-sm lg:text-base px-[2px]"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    {/* <div className="delete">
                                 <p
                                     onClick={handleDeleteItem}
                                     className="text-red-500 text-xs sm:text-sm md:text-base cursor-pointer mr-2"
@@ -165,7 +175,8 @@ const CheckoutCartCard = ({
                                     <FaTrashCan />
                                 </p>
                             </div> */}
-                        </div>
+                                </div>
+                        }
                         {/* Variant */}
                         {/* Variant Selection */}
                         {variants && variants.length > 0 && (
@@ -177,24 +188,28 @@ const CheckoutCartCard = ({
                                     />
                                     :
                                 </div>
-
-                                <div className="flex flex-wrap gap-2 ">
-                                    {variants.map((variant, vIndex) => (
-                                        <button
-                                            key={vIndex}
-                                            onClick={() =>
-                                                dispatch(updateCartSummary({ index, variant }))
-                                            }
-                                            className={`text-xs sm:text-sm md:text-xs px-2 sm:px-2 py-1 sm:py-1 border rounded-md transition-colors duration-200
+                                {
+                                    isSingleProductCheckout ?
+                                        <div className="text-xs sm:text-sm md:text-xs px-2 sm:px-2 py-1 sm:py-1 border rounded-md  bg-theme text-white border-theme">{productVarient}</div>
+                                        :
+                                        <div className="flex flex-wrap gap-2 ">
+                                            {variants.map((variant, vIndex) => (
+                                                <button
+                                                    key={vIndex}
+                                                    onClick={() =>
+                                                        dispatch(updateCartSummary({ index, variant }))
+                                                    }
+                                                    className={`text-xs sm:text-sm md:text-xs px-2 sm:px-2 py-1 sm:py-1 border rounded-md transition-colors duration-200
             ${productVarient === variant
-                                                    ? "bg-theme text-white border-theme"
-                                                    : "bg-white text-primary border-gray-300 hover:border-theme"
-                                                }`}
-                                        >
-                                            {variant}
-                                        </button>
-                                    ))}
-                                </div>
+                                                            ? "bg-theme text-white border-theme"
+                                                            : "bg-white text-primary border-gray-300 hover:border-theme"
+                                                        }`}
+                                                >
+                                                    {variant}
+                                                </button>
+                                            ))}
+                                        </div>
+                                }
                             </div>
                         )}
                     </div>

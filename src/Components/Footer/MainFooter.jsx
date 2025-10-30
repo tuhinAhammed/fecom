@@ -257,8 +257,8 @@ const Footer = () => {
                             )}
 
                         </div>
-                        <div className="col-span-3">
-                            <div className=" grid grid-cols-3 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8text-xs md: lg:gap-12">
+                        <div className="lg:col-span-3">
+                            <div className=" grid grid-cols-3 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8 text-xs md: lg:gap-12">
 
                                 <div className="lg:col-span-1">
                                     <MidTitle
@@ -314,7 +314,7 @@ const Footer = () => {
 
                                             >Head Office: Dhaka, Bangladesh</a>
                                         </li>
-                                        <li className="flex items-center gap-2 group">
+                                        {/* <li className="flex items-center gap-2 group">
                                             <MdOutlineMail className="w-5 h-5 text-primary opacity-80 group-hover:text-theme duration-200" />
                                             <a target="_blank" href="mailto:support@objectfashion.com">
 
@@ -326,7 +326,7 @@ const Footer = () => {
                                             </a>
                                                 
                                            
-                                        </li>
+                                        </li> */}
 
                                         <li className="flex items-center gap-2 group">
                                             <IoTimeOutline className="w-5 h-5 text-primary opacity-80 group-hover:text-theme duration-100" />
@@ -337,8 +337,6 @@ const Footer = () => {
                                         </li>
                                     </ul>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>

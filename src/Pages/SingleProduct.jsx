@@ -32,6 +32,7 @@ import { api, singleProductApi } from "../Api";
 import { MdBrightnessLow, MdOutlineBrightness1 } from "react-icons/md";
 import BuyNowButton from "../Layout/Button/BuyNowButton";
 import { CgPentagonTopRight } from "react-icons/cg";
+import RelatedProduct from "../Components/Product/RelatedProduct";
 
 const SingleProduct = () => {
   const [productItem, setProductItem] = useState({});
@@ -40,6 +41,7 @@ const SingleProduct = () => {
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState({});
+  const [allProductData , setAllProductData] = useState({})
   const location = useLocation();
   const { slug } = useParams();
   const dispatch = useDispatch();
@@ -48,11 +50,12 @@ const SingleProduct = () => {
   const [variantLoading, setVariantLoading] = useState(true);
   const [variantProductInfo, setVariantProductInfo] = useState({});
   const [translations, setTranslations] = useState({});
+  const landingData = useSelector((state) => state?.landingPageData?.data)
   const selectedLanguage = useSelector(
     (state) => state.language?.selectedLanguage
   );
-  const { productId } = location.state || {};
-
+  const  productId  = location?.state?.productId || {};
+console.log();
   useEffect(() => {
     const handleProductFetch = async () => {
       setLoading(true);
@@ -66,12 +69,13 @@ const SingleProduct = () => {
         const response = await axios.get(
           `${singleProductApi}${productId}`
         );
-
-        console.log("API Response:", response.data);
         const product = response.data.product || {};
         setProductItem(product);
-        // For related products, you might need to adjust based on your API
-        setRelatedProduct([]); // Set empty for now, adjust if API provides related products
+        const related = (landingData?.products?.all || []).filter(
+          (p) => p?.category_id === product?.category_id && p?.id !== product?.id
+        );
+        console.log(related);
+        setRelatedProduct(related);
 
         // Process images from photos array
         const images = product?.photos || [];
@@ -104,6 +108,16 @@ const SingleProduct = () => {
       handleProductFetch();
     }
   }, [productId, slug]);
+  console.log(relatedProduct);
+  // fetch all Products
+  // useEffect(() => {
+  //   if (productItem?.category_id && allProductData?.length > 0) {
+  //     const related = allProductData.filter(
+  //       (p) => p?.category_id === productItem?.category_id && p.id !== productItem?.id
+  //     );
+  //     setRelatedProduct(related);
+  //   }
+  // }, [productItem, allProductData]);
 
   const [count, setCount] = useState(1); // Default to 1 since min_buying_qty is not in API
 
@@ -156,7 +170,6 @@ const SingleProduct = () => {
   useEffect(() => {
     setCount(1);
   }, [slug]);
-console.log(productItem);
   // Calculate prices based on API response
   const finalPrice = parseFloat(productItem?.offer_price) ;
   const regularPrice = parseFloat(productItem?.regular_price) ;
@@ -219,7 +232,8 @@ console.log(productItem);
   // 🛍 Buy Now Handler
   const handleBuyNow = () => {
     const hasVariants = productItem?.variants?.length > 0;
-  
+    const countValue =
+    parseInt(document.getElementById("quantityInput")?.value) || 1;
     // ⚠️ Show warning only for Buy Now (not for Add to Cart)
     if (hasVariants && !selectedVariant?.Size) {
       toast.warning("Please select a variant before Order!", {
@@ -232,7 +246,15 @@ console.log(productItem);
     }
   
     // ✅ If variant selected or no variants exist, proceed to checkout
-    navigate("/checkout");
+      const newItem = {
+          productId: productItem.id,
+          quantity: countValue, // Set to 1 for a single product checkout
+          variant: selectedVariant?.Size,
+          selected : true
+      };
+      // Navigate to the checkout page with the selected product as state
+      navigate("/checkout", { state: { cartItems: [newItem] } });
+
   };
   
   
@@ -621,6 +643,12 @@ console.log(productItem);
           {relatedProduct?.length > 0 && (
             <div className="pt-2 sm:pt-4 md:pt-6 lg:pt-8 xl:pt-10">
               {/* Related products component would go here */}
+              <RelatedProduct
+                // key={index}
+                categoryName="Related Products"
+                loading={loading}
+                productData={relatedProduct}
+              />
             </div>
           )}
         </Container>

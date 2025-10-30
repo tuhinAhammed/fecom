@@ -74,8 +74,6 @@ const cartSlice = createSlice({
     
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
-    
-    
     removeOrderedItems(state, action) {
       const orderedProductIds = action.payload; // Array of product IDs that were ordered
       state.cartItems = state.cartItems.filter(

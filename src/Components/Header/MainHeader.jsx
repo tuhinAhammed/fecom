@@ -154,7 +154,7 @@ const MainHeader = () => {
             {/* Mobile Navigation - Visible only on small devices */}
             <div className="flex items-center gap-4 md:hidden">
               {/* Wishlist Icon */}
-              <div className="relative text-xl cursor-pointer" >
+              <div onClick={handleGoWishlist} className="relative text-xl cursor-pointer" >
                 <FaRegHeart />
                 {cartItemCount > 0 && (
                   <div className="absolute -top-2 -right-2 bg-theme text-secondary text-[10px] rounded-full w-[18px] h-[18px] flex items-center justify-center">

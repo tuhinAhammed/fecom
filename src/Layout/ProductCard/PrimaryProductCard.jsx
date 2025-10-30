@@ -73,7 +73,6 @@ const PrimaryProductCard = ({
       .replace(/\s+/g, '-')    // Replace spaces with hyphens
       .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
       .trim();
-    console.log("ok");
     navigate(`/product/${productSlug}`, { state: { productId: productId } });
   };
   const handleAddToCart = () => {
@@ -114,9 +113,9 @@ const PrimaryProductCard = ({
       transition: Bounce,
     });
   };
+// Buy Now
 
   // Add To WishList
-
   const handleAddToWishlist = () => {
     const alreadyExists = wishlistItems.some(
       (item) =>
@@ -250,7 +249,7 @@ const PrimaryProductCard = ({
               {/* Discount Badge */}
               {regularPrice < finalPrice && (
                 <div className="absolute  top-1 sm:top-2 md:top-3 lg:top-3 left-1 sm:left-2 md:left-3 lg:left-3 bg-theme text-secondary text-[8px] md:text-[10px] lg:text-xs md:font-medium px-[6px] md:px-2 py-[2px] md:py-1 rounded-sm md:rounded-md z-10">
-                  <p className="text-[12px] font-normal">
+                  <p className="text-xs font-normal">
                     {Math.round(((regularPrice - finalPrice) / regularPrice) * 100)}% OFF
                   </p>
                 </div>
@@ -337,7 +336,7 @@ const PrimaryProductCard = ({
                     <div className="" >
                         <div className="grid-cols-1 gap-1 grid transform transition-all duration-300 ease-out translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ">
                           <BuyNowButton
-                            onClick={handleAddToCart}
+                            onClick={handleProductFetch}
                             className="w-full m-auto"
                             // link={"/"}
                             text={(() => {

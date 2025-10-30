@@ -1,0 +1,115 @@
+import React, { useRef } from "react";
+import Container from "../../Layout/Container";
+
+// Import Swiper components and styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import {
+  MdOutlineArrowBackIosNew,
+  MdOutlineArrowForwardIos,
+} from "react-icons/md";
+
+import { useSelector } from "react-redux";
+import PrimaryProductCard from "../../Layout/ProductCard/PrimaryProductCard";
+import LargeTitle from "../../Layout/Title/LargeTitle";
+
+const RelatedProduct = ({
+  categoryName,
+  productData,
+  selectedCtegory,
+  loading,
+}) => {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+    // Translation
+  return (
+    <div className=" bg-secondary ">
+      <Container>
+        <div
+          className="  bg-secondary rounded-md"
+
+        >
+          {/* Section Title with Custom Navigation Buttons */}
+          <div className="pb-sectionSm flex items-center justify-between relative">
+            <LargeTitle className="font-medium" text={categoryName} />
+            <div className="flex gap-x-2 sm:gap-x-5 md:gap-x-6 lg:gap-x-8 items-center">
+              {/* <SecondaryButton link={`/shop`}  text="View All" /> */}
+              <div className="flex space-x-1 md:space-x-2 hidden md:flex">
+                <div
+                  ref={prevRef}
+                  className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep  border-[1px] border-tertiary border-opacity-[0.2]"
+                  style={{ boxShadow: "0px 6px 16px rgba(0,0,0,0.15)" }}
+                >
+                  <MdOutlineArrowBackIosNew /> {/* Left Arrow */}
+                </div>
+                <div
+                  ref={nextRef}
+                  className="w-6 md:w-8 lg:w-10 h-6 md:h-8 lg:h-10 bg-secondary hover:bg-theme hover:text-secondary duration-300 text-primary text-[10px] sm:text-sm md:text-md lg:text-lg flex items-center justify-center rounded-md cursor-pointer active:bg-themeDeep  border-[1px] border-tertiary border-opacity-[0.2]"
+                  style={{ boxShadow: "0px 6px 16px rgba(0,0,0,0.15)" }}
+                >
+                  <MdOutlineArrowForwardIos /> {/* Right Arrow */}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Swiper Slider */}
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            spaceBetween={20} // Space between slides
+            slidesPerView={3} // Show 3 slides per view
+            slidesPerGroup={1} // Slide one item at a time
+            autoplay={{
+              delay: 5000, // Auto-slide every 3 seconds
+              disableOnInteraction: false,
+            }}
+            loop={true} // Ensures smooth looping
+            navigation={{
+              prevEl: prevRef.current,
+              nextEl: nextRef.current,
+            }}
+            onBeforeInit={(swiper) => {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+            }}
+            breakpoints={{
+              1: { slidesPerView: 2 },
+              576: { slidesPerView: 3 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+              1200: { slidesPerView: 4 },
+            }}
+          >
+            {productData.map((item, index) => {
+              return (
+                <SwiperSlide className="shadow-sm" key={index}>
+                          <PrimaryProductCard
+                            thumbnail={item.photos?.[0] ?
+                              `${item.photos[0].file_path}/${item.photos[0].file_name}` :
+                              item.thumbnail
+                            }
+                            category={item.category_id}
+                            name={item.product_name}
+                            finalPrice={item.offer_price}
+                            regularPrice={item.regular_price}
+                            slug={item.slug}
+                            ratting={item.rating}
+                            loading={loading}
+                            onQuickView={() => handleOpenModal(item)}
+                            productId={item?.id}
+                            stock={item.stock}
+                            variants={item?.variants}
+                          />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+export default RelatedProduct;

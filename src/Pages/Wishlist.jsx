@@ -69,55 +69,58 @@ const WishlistPage = () => {
 
         fetchWishlistProducts();
     }, [wishlistItems]);
-
-
     // Use the translated name if available, otherwise fall back to the default name
-
     const handleAddToCart = (item) => {
-        console.log(item);
         const newItem = {
-          productId: item.id,
-          quantity: 1,                             // Default quantity
-          variant:  null,
+            productId: item.id, // Use the correct product ID
+            quantity: 1, // Default quantity when adding
+            variant: null,
         };
     
         // Check if the product already exists in the cart
         const existingItemIndex = cartItems.findIndex(
-          (item) => item.productId === newItem.productId // Compare based on productId
+            (cartItem) => cartItem.productId === newItem.productId
         );
     
         if (existingItemIndex !== -1) {
-          // If product exists, increase quantity
-          const existingItem = cartItems[existingItemIndex];
-          const updatedItem = {
-            ...existingItem,
-            quantity: existingItem.quantity + 1,
-          };
-    
-          dispatch(addItem(updatedItem));
+            // If product exists, show a warning toast and do not update the cart
+            toast.warn("This product is already in your cart!", {
+                position: `${toastr_position}`,
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         } else {
-          // If product doesn't exist, add the new product to the cart
-          dispatch(addItem(newItem));
+            // If product doesn't exist, add the new product to the cart
+            dispatch(addItem(newItem));
+            toast.success("Successfully added to cart!", {
+                position: `${toastr_position}`,
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         }
-    
-        toast.success("Successfully added!", {
-          position: `${toastr_position}`,
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-      };
+    };
 
-    const handleProductDetails = async (slug) => {
-        const response = await axios.get(`${api}/${version}/product?slug=${slug}`);
-        navigate(`/product/${slug}`, {
-            state: { productData: response?.data },
-        });
+    const handleProductDetails = async ( name , productId) => {
+
+        const productSlug = name
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '') // Remove special characters
+        .replace(/\s+/g, '-')    // Replace spaces with hyphens
+        .replace(/-+/g, '-')     // Replace multiple hyphens with single hyphen
+        .trim();
+      navigate(`/product/${productSlug}`, { state: { productId: productId } });
     };
     const handleLoadMore = () => {
         setVisibleItems((prev) => prev + 6);
@@ -252,7 +255,7 @@ const WishlistPage = () => {
                                                                     {expandedRow === index ? "-" : "+"}
                                                                 </button>
                                                                 <div
-                                                                    onClick={() => handleProductDetails(item?.slug)}
+                                                                    onClick={() => handleProductDetails(item.product_name , item?.id)}
                                                                     className="aspect-[5/6] max-h-[90px] overflow-hidden rounded-sm cursor-pointer"
                                                                 >
                                                                     <img
@@ -265,7 +268,7 @@ const WishlistPage = () => {
                                                             </div>
                                                         </td>
                                                         <td className="py-2 px-2">
-                                                            <div onClick={() => handleProductDetails(item?.slug)}>
+                                                            <div onClick={() => handleProductDetails(item.product_name , item?.id)}>
                                                                 <MinTitle
                                                                     className="text-tertiary hover:text-theme cursor-pointer text-primary"
                                                                     text={
@@ -328,6 +331,7 @@ const WishlistPage = () => {
                                                                             }
                                                                         />
                                                                         <BuyNowButton
+                                                                         onClick={() => handleProductDetails(item.product_name , item?.id)}
                                                                             className="w-full"
                                                                             text={(() => {
                                                                                 const fullText = "Buy Now"
