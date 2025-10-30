@@ -22,7 +22,7 @@ import { BsThreads } from "react-icons/bs";
 import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
-import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
+import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"; // Check this path
 import nogodImg from "../../assets/paymentGateway/nogodImg.png";
 import pp from "../../assets/paymentGateway/PP.png";
 import stripeImg from "../../assets/paymentGateway/stripeImg.png";
