@@ -23,7 +23,6 @@ import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
-import mastercardPayImg from "../../assets/paymentGateway/mastercardPayImg.png";
 import nogodImg from "../../assets/paymentGateway/nogodImg.png";
 import pp from "../../assets/paymentGateway/PP.png";
 import stripeImg from "../../assets/paymentGateway/stripeImg.png";
@@ -147,9 +146,6 @@ export const paymentMethod = [
         image: bkashImg,
     },
 
-    {
-        image: mastercardPayImg,
-    },
     {
         image: nogodImg,
     },
