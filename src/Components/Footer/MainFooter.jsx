@@ -22,7 +22,7 @@ import { BsThreads } from "react-icons/bs";
 import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
-import bkash from "../../assets/paymentGateway/bkash.jpg";
+import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
 import dutch from "../../assets/paymentGateway/dutch.jpg";
 import mastercard from "../../assets/paymentGateway/mastercard.png";
 import nogod from "../../assets/paymentGateway/nogod.png";
@@ -145,7 +145,7 @@ export const quickLink = [
 
 export const paymentMethod = [
     {
-        image: bkash,
+        image: bkashImg,
     },
     {
         image: dutch,
