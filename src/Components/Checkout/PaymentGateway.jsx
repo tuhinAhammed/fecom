@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import MinTitle from "../../Layout/Title/MinTitle";
 import MidTitle from "../../Layout/Title/MidTitle";
 import mobileBanking from "../../assets/PaymentGateway/mobileBanking.png"
-import bkash from "../../assets/paymentGateway/bkash.jpg";
-import nogod from "../../assets/paymentGateway/nogod.png";
+import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
+import nogodImg from "../../assets/paymentGateway/nogodImg.png";
 import rocket from "../../assets/paymentGateway/rocket.png";
-import dutch from "../../assets/paymentGateway/dutch.jpg";
-import mastercard from "../../assets/paymentGateway/mastercard.png";
+import stripeImg from "../../assets/paymentGateway/stripeImg.png";
+import visaImg from "../../assets/paymentGateway/visaImg.png";
 import pp from "../../assets/paymentGateway/PP.png";
-import stripe from "../../assets/paymentGateway/stripe.png";
-import visa from "../../assets/paymentGateway/visa.png";
+
 const PaymentGateway = ({
   paymentMethods = [],
   selectedPayment,
@@ -21,13 +20,13 @@ const PaymentGateway = ({
       id: "bkash",
       name: "Bkash",
       type: "mobile",
-      icon: bkash,
+      icon: bkashImg,
     },
     {
       id: "nagad",
       name: "Nagad",
       type: "mobile",
-      icon: nogod,
+      icon: nogodImg,
     },
     {
       id: "rocket",
@@ -39,7 +38,7 @@ const PaymentGateway = ({
       id: "visa",
       name: "Visa",
       type: "mobile",
-      icon: visa,
+      icon: visaImg,
     },
     {
       id: "cod",
