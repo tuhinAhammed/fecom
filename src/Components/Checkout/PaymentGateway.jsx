@@ -3,11 +3,11 @@ import MinTitle from "../../Layout/Title/MinTitle";
 import MidTitle from "../../Layout/Title/MidTitle";
 import mobileBanking from "../../assets/PaymentGateway/mobileBanking.png"
 import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
-import nogodImg from "../../assets/paymentGateway/nogodImg.png";
-import rocket from "../../assets/paymentGateway/rocket.png";
-import stripeImg from "../../assets/paymentGateway/stripeImg.png";
-import visaImg from "../../assets/paymentGateway/visaImg.png";
-import pp from "../../assets/paymentGateway/PP.png";
+import nogodImg from "../../assets/PaymentGateway/nogodImg.png";
+import rocket from "../../assets/PaymentGateway/rocket.png";
+import stripeImg from "../../assets/PaymentGateway/stripeImg.png";
+import visaImg from "../../assets/PaymentGateway/visaImg.png";
+import pp from "../../assets/PaymentGateway/PP.png";
 
 const PaymentGateway = ({
   paymentMethods = [],

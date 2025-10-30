@@ -23,10 +23,10 @@ import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"; // Check this path
-import nogodImg from "../../assets/paymentGateway/nogodImg.png";
-import pp from "../../assets/paymentGateway/PP.png";
-import stripeImg from "../../assets/paymentGateway/stripeImg.png";
-import visaImg from "../../assets/paymentGateway/visaImg.png";
+import nogodImg from "../../assets/PaymentGateway/nogodImg.png";
+import pp from "../../assets/PaymentGateway/PP.png";
+import stripeImg from "../../assets/PaymentGateway/stripeImg.png";
+import visaImg from "../../assets/PaymentGateway/visaImg.png";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { CgLock, CgMail } from "react-icons/cg";
