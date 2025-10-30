@@ -23,11 +23,11 @@ import Container from "../../Layout/Container";
 import ExtraMinTitle from "../../Layout/Title/ExtraMinTitle";
 // import ExtraMidTitle from "../Layout/Title/ExtraMidTitle";
 import bkashImg from "../../assets/PaymentGateway/bkashImg.jpg"
-import mastercardPay from "../../assets/paymentGateway/mastercardPay.png";
+import mastercardPayImg from "../../assets/paymentGateway/mastercardPayImg.png";
 import nogodImg from "../../assets/paymentGateway/nogodImg.png";
 import pp from "../../assets/paymentGateway/PP.png";
 import stripeImg from "../../assets/paymentGateway/stripeImg.png";
-import visa from "../../assets/paymentGateway/visa.png";
+import visaImg from "../../assets/paymentGateway/visaImg.png";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { CgLock, CgMail } from "react-icons/cg";
@@ -148,7 +148,7 @@ export const paymentMethod = [
     },
 
     {
-        image: mastercardPay,
+        image: mastercardPayImg,
     },
     {
         image: nogodImg,
@@ -160,7 +160,7 @@ export const paymentMethod = [
         image: stripeImg,
     },
     {
-        image: visa,
+        image: visaImg,
     },
 ];
 
